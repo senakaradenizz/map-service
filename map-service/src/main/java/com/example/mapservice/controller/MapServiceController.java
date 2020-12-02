@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class MapServiceController {
     
     @Autowired
@@ -33,5 +33,15 @@ public class MapServiceController {
     @Autowired
     CoordinateRepository coordinateRepository;
     
-     
+    @GetMapping("/countries")
+    public List<Country> getAllCountries(){
+        return countryRepository.findAll();
+    }
+        
+    @PostMapping("/countries")
+    public Country createCountry(@Valid @RequestBody Country country) {
+        return countryRepository.save(country);
+    }
+    
+    
 }
