@@ -7,7 +7,6 @@ package com.example.mapservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.mapservice.model.Country;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 
