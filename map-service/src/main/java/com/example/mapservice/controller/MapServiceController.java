@@ -6,15 +6,14 @@
 package com.example.mapservice.controller;
 
 import com.example.mapservice.exception.ResourceNotFoundException;
-import com.example.mapservice.repository.CoordinateRepository;
-import com.example.mapservice.repository.CountryRepository;
-import com.example.mapservice.repository.ProvinceRepository;
-import com.example.mapservice.repository.SubprovinceRepository;
 import com.example.mapservice.model.Country;
 import com.example.mapservice.model.Province;
 import com.example.mapservice.model.Subprovince;
 import com.example.mapservice.model.Coordinate;
+import com.example.mapservice.service.MapService;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,48 +23,62 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api")
 public class MapServiceController {
     
     @Autowired
-    CountryRepository countryRepository;
-    @Autowired
-    ProvinceRepository provinceRepository;
-    @Autowired
-    SubprovinceRepository subprovinceRepository;
-    @Autowired
-    CoordinateRepository coordinateRepository;
+    private MapService mapService;
   
-    @GetMapping
-    List<Country> customers() {
-        return countryRepository.findAll();
-    }
-    
-    @GetMapping("/countries")
-    public List<Country> getAllCountries(){
-        return countryRepository.findAll();
-    }
-    
-    @GetMapping("/countries/{id}")
-    public ResponseEntity<Country> getCountryById(@PathVariable(value = "id") Long countryId)
-            throws ResourceNotFoundException {
-	Country country = countryRepository.findById(countryId)
-                                    .orElseThrow(() -> new ResourceNotFoundException("Country not found for this id : " + countryId));
-	return ResponseEntity.ok().body(country);
-    }
-    
-    @GetMapping("/provinces")
-    public List<Province> getAllProvinces(){
-        return provinceRepository.findAll();
-    }
+//    @GetMapping
+//    List<Country> customers() {
+//        return countryRepository.findAll();
+//    }
+//    
+//    @GetMapping("/countries")
+//    public List<Country> getAllCountries(){
+//        return countryRepository.findAll();
+//    }
+//    
+//    @GetMapping("/countries/{id}")
+//    public ResponseEntity<Country> getCountryById(@PathVariable(value = "id") Long countryId)
+//            throws ResourceNotFoundException {
+//	Country country = countryRepository.findById(countryId)
+//                                    .orElseThrow(() -> new ResourceNotFoundException("Country not found for this id : " + countryId));
+//	return ResponseEntity.ok().body(country);
+//    }
+//    
+//    @GetMapping("/provinces")
+//    public List<Province> getAllProvinces(){
+//        return provinceRepository.findAll();
+//    }
     
     @GetMapping("/subprovinces")
-    public List<Subprovince> getAllSubprovinces(){
-        return subprovinceRepository.findAll();
+    public List<Subprovince> findAllSubprovinces(){
+        return mapService.getAllSubprovincess();
+    }
+    
+    @GetMapping("/subprovinces/{id}")
+    public ResponseEntity<Subprovince> findSubprovinceById(@PathVariable(value = "id") Long subprovinceId){
+        try {
+            return mapService.getSubprovinceById(subprovinceId);
+        } catch (ResourceNotFoundException ex) {
+            Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @GetMapping("/coordinates")
-    public List<Coordinate> getAllCoordinates(){
-        return coordinateRepository.findAll();
+    public List<Coordinate> findAllCoordinates(){
+        return mapService.getAllCoordinates();
     }
+    
+    @GetMapping("/coordinates/{id}")
+    public ResponseEntity<Coordinate> findCoordinateById(@PathVariable(value = "id") Long coordinateId){
+        try {
+            return mapService.getCoordinateById(coordinateId);
+        } catch (ResourceNotFoundException ex) {
+            Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
 }
