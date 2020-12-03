@@ -40,6 +40,7 @@ public class MapServiceController {
             return mapService.getCountryById(countryId);
         } catch (ResourceNotFoundException ex) {
             Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
     
@@ -54,6 +55,7 @@ public class MapServiceController {
             return mapService.getProvinceById(provinceId);
         } catch (ResourceNotFoundException ex) {
             Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
     
@@ -68,6 +70,7 @@ public class MapServiceController {
             return mapService.getSubprovinceById(subprovinceId);
         } catch (ResourceNotFoundException ex) {
             Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
     
@@ -82,6 +85,7 @@ public class MapServiceController {
             return mapService.getCoordinateById(coordinateId);
         } catch (ResourceNotFoundException ex) {
             Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 }
