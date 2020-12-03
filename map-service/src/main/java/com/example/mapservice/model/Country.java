@@ -42,11 +42,6 @@ public class Country {
     @ToString.Exclude
     @Column(name = "country_name")
     private String countryName;
-       
-    
-    @ToString.Exclude
-    @OneToMany(mappedBy = "countryId", cascade = CascadeType.ALL)
-    private List<Province> provinceList;
 
     public Country(String countryName) {
         this.countryName = countryName;
