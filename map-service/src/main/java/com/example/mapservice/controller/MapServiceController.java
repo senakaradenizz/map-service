@@ -28,33 +28,38 @@ public class MapServiceController {
     
     @Autowired
     private MapService mapService;
-  
-//    @GetMapping
-//    List<Country> customers() {
-//        return countryRepository.findAll();
-//    }
-//    
-//    @GetMapping("/countries")
-//    public List<Country> getAllCountries(){
-//        return countryRepository.findAll();
-//    }
-//    
-//    @GetMapping("/countries/{id}")
-//    public ResponseEntity<Country> getCountryById(@PathVariable(value = "id") Long countryId)
-//            throws ResourceNotFoundException {
-//	Country country = countryRepository.findById(countryId)
-//                                    .orElseThrow(() -> new ResourceNotFoundException("Country not found for this id : " + countryId));
-//	return ResponseEntity.ok().body(country);
-//    }
-//    
-//    @GetMapping("/provinces")
-//    public List<Province> getAllProvinces(){
-//        return provinceRepository.findAll();
-//    }
+    
+    @GetMapping("/countries")
+    public List<Country> findAllCountries(){
+        return mapService.getAllCountries();
+    }
+
+    @GetMapping("/countries/{id}")
+    public ResponseEntity<Country> findCountryById(@PathVariable(value = "id") Long countryId){
+        try {
+            return mapService.getCountryById(countryId);
+        } catch (ResourceNotFoundException ex) {
+            Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @GetMapping("/provinces")
+    public List<Province> findAllProvinces(){
+        return mapService.getAllProvinces();
+    }
+    
+    @GetMapping("/provinces/{id}")
+    public ResponseEntity<Province> findProvinceById(@PathVariable(value = "id") Long provinceId){
+        try {
+            return mapService.getProvinceById(provinceId);
+        } catch (ResourceNotFoundException ex) {
+            Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     @GetMapping("/subprovinces")
     public List<Subprovince> findAllSubprovinces(){
-        return mapService.getAllSubprovincess();
+        return mapService.getAllSubprovinces();
     }
     
     @GetMapping("/subprovinces/{id}")
@@ -79,6 +84,4 @@ public class MapServiceController {
             Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
 }
