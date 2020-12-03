@@ -46,10 +46,6 @@ public class MapService {
 	return ResponseEntity.ok().body(country);
     }
     
-    public Country getCountryByCountryName(String countryName){
-        return countryRepository.findByCountryName(countryName);
-    }
-    
     public List<Province> getAllProvinces(){
         return provinceRepository.findAll();
     }

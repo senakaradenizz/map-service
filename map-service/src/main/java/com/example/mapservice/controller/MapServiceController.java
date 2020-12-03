@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/mapservice")
 public class MapServiceController {
     
     @Autowired
@@ -32,14 +32,9 @@ public class MapServiceController {
         return mapService.getAllCountries();
     }
 
-    @GetMapping("/countries/id/{id}")
+    @GetMapping("/countries/{id}")
     public ResponseEntity<Country> findCountryById(@PathVariable(value = "id") Long countryId) throws ResourceNotFoundException{
         return mapService.getCountryById(countryId);
-    }
-    
-    @GetMapping("/countries/name/{name}")
-    public Country findCountryByCountryName(@PathVariable(value = "name") String countryName){
-        return mapService.getCountryByCountryName(countryName);
     }
     
     @GetMapping("/provinces")
@@ -47,7 +42,7 @@ public class MapServiceController {
         return mapService.getAllProvinces();
     }
     
-    @GetMapping("/provinces/id/{id}")
+    @GetMapping("/provinces/{id}")
     public ResponseEntity<Province> findProvinceById(@PathVariable(value = "id") Long provinceId) throws ResourceNotFoundException{
             return mapService.getProvinceById(provinceId);
     }
@@ -57,7 +52,7 @@ public class MapServiceController {
         return mapService.getAllSubprovinces();
     }
     
-    @GetMapping("/subprovinces/id/{id}")
+    @GetMapping("/subprovinces/{id}")
     public ResponseEntity<Subprovince> findSubprovinceById(@PathVariable(value = "id") Long subprovinceId) throws ResourceNotFoundException{
             return mapService.getSubprovinceById(subprovinceId);
     }
@@ -67,7 +62,7 @@ public class MapServiceController {
         return mapService.getAllCoordinates();
     }
     
-    @GetMapping("/coordinates/id/{id}")
+    @GetMapping("/coordinates/{id}")
     public ResponseEntity<Coordinate> findCoordinateById(@PathVariable(value = "id") Long coordinateId) throws ResourceNotFoundException{
         return mapService.getCoordinateById(coordinateId);
     }
