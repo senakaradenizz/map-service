@@ -17,7 +17,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +26,7 @@ import lombok.ToString;
 
 @Entity
 @Getter @Setter 
-@NoArgsConstructor @AllArgsConstructor 
+@NoArgsConstructor
 @ToString
 @EqualsAndHashCode(exclude = {"subprovinceName", "coordinateList", "provinceId"})
 @Table(name = "subprovince")
@@ -52,4 +51,8 @@ public class Subprovince {
     @JoinColumn(name = "province_id", referencedColumnName = "province_id")
     @ManyToOne
     private Province provinceId;
+
+    public Subprovince(String subprovinceName) {
+        this.subprovinceName = subprovinceName;
+    }
 }

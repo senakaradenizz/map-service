@@ -6,6 +6,7 @@
 package com.example.mapservice.model;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +26,7 @@ import lombok.ToString;
 
 @Entity
 @Getter @Setter 
-@NoArgsConstructor @AllArgsConstructor 
+@NoArgsConstructor
 @ToString
 @EqualsAndHashCode(exclude = {"countryName"})
 @Table(name = "country")
@@ -42,4 +43,12 @@ public class Country {
     @Column(name = "country_name")
     private String countryName;
        
+    
+    @ToString.Exclude
+    @OneToMany(mappedBy = "countryId", cascade = CascadeType.ALL)
+    private List<Province> provinceList;
+
+    public Country(String countryName) {
+        this.countryName = countryName;
+    }
 }

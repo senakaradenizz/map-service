@@ -10,6 +10,9 @@ import com.example.mapservice.repository.CountryRepository;
 import com.example.mapservice.repository.ProvinceRepository;
 import com.example.mapservice.repository.SubprovinceRepository;
 import com.example.mapservice.model.Country;
+import com.example.mapservice.model.Province;
+import com.example.mapservice.model.Subprovince;
+import com.example.mapservice.model.Coordinate;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class MapServiceController {
     
     @Autowired
@@ -39,5 +42,25 @@ public class MapServiceController {
     @GetMapping
     List<Country> customers() {
         return countryRepository.findAll();
+    }
+    
+    @GetMapping("/countries")
+    public List<Country> getAllCountries(){
+        return countryRepository.findAll();
+    }
+    
+    @GetMapping("/provinces")
+    public List<Province> getAllProvinces(){
+        return provinceRepository.findAll();
+    }
+    
+    @GetMapping("/subprovinces")
+    public List<Subprovince> getAllSubprovinces(){
+        return subprovinceRepository.findAll();
+    }
+    
+    @GetMapping("/coordinates")
+    public List<Coordinate> getAllCoordinates(){
+        return coordinateRepository.findAll();
     }
 }
