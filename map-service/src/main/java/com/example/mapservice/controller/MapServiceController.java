@@ -35,13 +35,8 @@ public class MapServiceController {
     }
 
     @GetMapping("/countries/{id}")
-    public ResponseEntity<Country> findCountryById(@PathVariable(value = "id") Long countryId){
-        try {
-            return mapService.getCountryById(countryId);
-        } catch (ResourceNotFoundException ex) {
-            Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+    public ResponseEntity<Country> findCountryById(@PathVariable(value = "id") Long countryId) throws ResourceNotFoundException{
+        return mapService.getCountryById(countryId);
     }
     
     @GetMapping("/provinces")
@@ -50,13 +45,8 @@ public class MapServiceController {
     }
     
     @GetMapping("/provinces/{id}")
-    public ResponseEntity<Province> findProvinceById(@PathVariable(value = "id") Long provinceId){
-        try {
+    public ResponseEntity<Province> findProvinceById(@PathVariable(value = "id") Long provinceId) throws ResourceNotFoundException{
             return mapService.getProvinceById(provinceId);
-        } catch (ResourceNotFoundException ex) {
-            Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
     }
     
     @GetMapping("/subprovinces")
@@ -65,13 +55,8 @@ public class MapServiceController {
     }
     
     @GetMapping("/subprovinces/{id}")
-    public ResponseEntity<Subprovince> findSubprovinceById(@PathVariable(value = "id") Long subprovinceId){
-        try {
+    public ResponseEntity<Subprovince> findSubprovinceById(@PathVariable(value = "id") Long subprovinceId) throws ResourceNotFoundException{
             return mapService.getSubprovinceById(subprovinceId);
-        } catch (ResourceNotFoundException ex) {
-            Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
     }
     
     @GetMapping("/coordinates")
@@ -80,12 +65,7 @@ public class MapServiceController {
     }
     
     @GetMapping("/coordinates/{id}")
-    public ResponseEntity<Coordinate> findCoordinateById(@PathVariable(value = "id") Long coordinateId){
-        try {
-            return mapService.getCoordinateById(coordinateId);
-        } catch (ResourceNotFoundException ex) {
-            Logger.getLogger(MapServiceController.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+    public ResponseEntity<Coordinate> findCoordinateById(@PathVariable(value = "id") Long coordinateId) throws ResourceNotFoundException{
+        return mapService.getCoordinateById(coordinateId);
     }
 }
