@@ -12,8 +12,6 @@ import com.example.mapservice.model.Subprovince;
 import com.example.mapservice.model.Coordinate;
 import com.example.mapservice.service.MapService;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

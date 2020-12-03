@@ -9,10 +9,6 @@ import com.example.mapservice.model.Province;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- *
- * @author sena
- */
 
 @Repository
 public interface ProvinceRepository extends JpaRepository<Province, Long>{
