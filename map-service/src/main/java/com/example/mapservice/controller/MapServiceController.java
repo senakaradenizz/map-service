@@ -5,6 +5,7 @@
  */
 package com.example.mapservice.controller;
 
+import com.example.mapservice.exception.ResourceNotFoundException;
 import com.example.mapservice.repository.CoordinateRepository;
 import com.example.mapservice.repository.CountryRepository;
 import com.example.mapservice.repository.ProvinceRepository;
@@ -16,6 +17,7 @@ import com.example.mapservice.model.Coordinate;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +49,14 @@ public class MapServiceController {
     @GetMapping("/countries")
     public List<Country> getAllCountries(){
         return countryRepository.findAll();
+    }
+    
+    @GetMapping("/countries/{id}")
+    public ResponseEntity<Country> getCountryById(@PathVariable(value = "id") Long countryId)
+            throws ResourceNotFoundException {
+	Country country = countryRepository.findById(countryId)
+                                    .orElseThrow(() -> new ResourceNotFoundException("Country not found for this id : " + countryId));
+	return ResponseEntity.ok().body(country);
     }
     
     @GetMapping("/provinces")
