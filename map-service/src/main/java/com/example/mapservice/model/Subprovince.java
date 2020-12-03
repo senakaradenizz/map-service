@@ -28,7 +28,7 @@ import lombok.ToString;
 @Getter @Setter 
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode(exclude = {"subprovinceName", "coordinateList", "provinceId"})
+@EqualsAndHashCode(exclude = {"subprovinceName", "provinceId"})
 @Table(name = "subprovince")
 @NamedQueries({
     @NamedQuery(name = "Subprovince.findAll", query = "SELECT s FROM Subprovince s")})
@@ -42,10 +42,6 @@ public class Subprovince {
     @ToString.Exclude
     @Column(name = "subprovince_name")
     private String subprovinceName;
-    
-    @ToString.Exclude
-    @OneToMany(mappedBy = "subprovinceId")
-    private List<Coordinate> coordinateList;
     
     @ToString.Exclude
     @JoinColumn(name = "province_id", referencedColumnName = "province_id")
