@@ -27,7 +27,7 @@ import lombok.ToString;
 @Getter @Setter 
 @NoArgsConstructor @AllArgsConstructor 
 @ToString
-@EqualsAndHashCode(exclude = {"countryName", "provinceList"})
+@EqualsAndHashCode(exclude = {"countryName"})
 @Table(name = "country")
 @NamedQueries({
     @NamedQuery(name = "Country.findAll", query = "SELECT c FROM Country c")})
@@ -41,8 +41,5 @@ public class Country {
     @ToString.Exclude
     @Column(name = "country_name")
     private String countryName;
-    
-    @ToString.Exclude
-    @OneToMany(mappedBy = "countryId")
-    private List<Province> provinceList;    
+       
 }
