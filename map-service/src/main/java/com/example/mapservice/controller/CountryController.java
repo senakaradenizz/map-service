@@ -6,8 +6,10 @@
 package com.example.mapservice.controller;
 
 import com.example.mapservice.exception.ResourceNotFoundException;
+import com.example.mapservice.model.BaseEntity;
 import com.example.mapservice.model.CountryEntity;
 import com.example.mapservice.service.CountryService;
+import java.io.Serializable;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/mapservice")
-public class CountryController{
+public class CountryController implements BaseController{
     
     private CountryService countryService;
     
@@ -35,8 +37,8 @@ public class CountryController{
     }
     
     @GetMapping("/countries/{id}")
+    @Override
     public ResponseEntity<CountryEntity> findById(@PathVariable Long id) throws ResourceNotFoundException{
-    
         return countryService.getCountryById(id);
     }
    

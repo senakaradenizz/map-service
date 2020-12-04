@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/mapservice")
-public class SubprovinceController {
+public class SubprovinceController implements BaseController{
     
     private SubprovinceService subprovinceService;
     
@@ -28,8 +28,8 @@ public class SubprovinceController {
     }
     
     @GetMapping("/subprovinces/{id}")
+    @Override
     public ResponseEntity<SubprovinceEntity> findById(@PathVariable Long id) throws ResourceNotFoundException{
-    
         return subprovinceService.getSubprovinceById(id);
     }
 }

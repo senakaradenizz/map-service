@@ -8,6 +8,7 @@ package com.example.mapservice.controller;
 import com.example.mapservice.exception.ResourceNotFoundException;
 import com.example.mapservice.model.CoordinateEntity;
 import com.example.mapservice.service.CoordinateService;
+import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/mapservice")
-public class CoordinateController{
+public class CoordinateController implements BaseController{
     
     private CoordinateService coordinateService;
     
@@ -28,7 +29,8 @@ public class CoordinateController{
     }
     
     @GetMapping("/coordinates/{id}")
-    public ResponseEntity<CoordinateEntity> findById(@PathVariable(value = "id") Long coordinateId) throws ResourceNotFoundException{
-        return coordinateService.getCoordinateById(coordinateId);
+    @Override
+    public ResponseEntity<CoordinateEntity> findById(@PathVariable Long id) throws ResourceNotFoundException{
+        return coordinateService.getCoordinateById(id);
     }
 }
