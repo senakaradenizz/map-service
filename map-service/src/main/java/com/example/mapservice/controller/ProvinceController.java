@@ -8,7 +8,6 @@ package com.example.mapservice.controller;
 import com.example.mapservice.exception.ResourceNotFoundException;
 import com.example.mapservice.model.ProvinceEntity;
 import com.example.mapservice.service.ProvinceService;
-import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
