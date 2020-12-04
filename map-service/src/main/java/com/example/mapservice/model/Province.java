@@ -12,8 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,14 +26,12 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode(exclude = {"provinceName", "countryId"})
 @Table(name = "province")
-@NamedQueries({
-    @NamedQuery(name = "Province.findAll", query = "SELECT p FROM Province p")})
 public class Province {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "province_id")
-    private long provinceId;
+    private Long provinceId;
     
     @ToString.Exclude
     @Column(name = "province_name")

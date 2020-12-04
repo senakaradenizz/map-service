@@ -12,10 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,14 +26,12 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode(exclude = {"latitude", "longitude", "subprovinceId"})
 @Table(name = "coordinate")
-@NamedQueries({
-    @NamedQuery(name = "Coordinate.findAll", query = "SELECT c FROM Coordinate c")})
 public class Coordinate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "coordinate_id")
-    private long coordinateId;
+    private Long coordinateId;
     
     @ToString.Exclude
     @Column(name = "latitude")
