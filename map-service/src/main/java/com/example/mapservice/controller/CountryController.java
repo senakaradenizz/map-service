@@ -5,7 +5,6 @@
  */
 package com.example.mapservice.controller;
 
-import com.example.mapservice.exception.ResourceNotFoundException;
 import com.example.mapservice.model.CountryEntity;
 import com.example.mapservice.service.CountryService;
 import java.util.List;

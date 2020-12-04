@@ -6,7 +6,6 @@
 package com.example.mapservice.repository;
 
 import com.example.mapservice.model.CoordinateEntity;
-import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.stereotype.Repository;
 
 
