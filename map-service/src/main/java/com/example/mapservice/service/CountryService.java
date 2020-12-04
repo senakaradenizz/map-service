@@ -26,8 +26,8 @@ public class CountryService extends BaseServiceImpl{
     }
     
     public List<CountryEntity> getAllCountries(){
-         
-        return countryRepository.findAll();
+         List<CountryEntity> resultList= countryRepository.findAll();
+        return resultList;
     }
     
     public ResponseEntity<CountryEntity> getCountryById(Long countryId)
