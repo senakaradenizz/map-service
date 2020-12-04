@@ -12,6 +12,7 @@ import lombok.Data;
 
 
 @Entity
+@Data
 @Table(name = "coordinate")
 public class CoordinateEntity extends BaseEntity{
 
