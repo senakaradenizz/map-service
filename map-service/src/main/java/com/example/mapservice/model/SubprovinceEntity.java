@@ -12,6 +12,7 @@ import lombok.Data;
 
 
 @Entity
+@Data
 @Table(name = "subprovince")
 public class SubprovinceEntity extends BaseEntity{
     

@@ -5,11 +5,14 @@
  */
 package com.example.mapservice.controller;
 
+import com.example.mapservice.exception.ResourceNotFoundException;
 import com.example.mapservice.model.CountryEntity;
 import com.example.mapservice.service.CountryService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +32,12 @@ public class CountryController{
     public List<CountryEntity> findAll(){
     
         return countryService.getAllCountries();
+    }
+    
+    @GetMapping("/countries/{id}")
+    public ResponseEntity<CountryEntity> findById(@PathVariable Long id) throws ResourceNotFoundException{
+    
+        return countryService.getCountryById(id);
     }
    
 }

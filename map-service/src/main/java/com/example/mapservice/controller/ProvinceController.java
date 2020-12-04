@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/mapservice")
-public abstract class ProvinceController implements BaseController{
+public class ProvinceController{
     
     private ProvinceService provinceService;
     
@@ -28,7 +28,8 @@ public abstract class ProvinceController implements BaseController{
     }
     
     @GetMapping("/provinces/{id}")
-    public ResponseEntity<ProvinceEntity> findById(@PathVariable(value = "id") Long provinceId) throws ResourceNotFoundException{
-        return provinceService.getProvinceById(provinceId);
+    public ResponseEntity<ProvinceEntity> findById(@PathVariable Long id) throws ResourceNotFoundException{
+    
+        return provinceService.getProvinceById(id);
     }
 }

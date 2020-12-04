@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/mapservice")
-public abstract class CoordinateController implements BaseController {
+public class CoordinateController{
     
     private CoordinateService coordinateService;
     
