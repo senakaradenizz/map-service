@@ -5,13 +5,15 @@
  */
 package com.example.mapservice.controller;
 
+import com.example.mapservice.exception.ResourceNotFoundException;
 import com.example.mapservice.model.BaseEntity;
+import java.io.Serializable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public interface BaseController {
+public interface BaseController<T extends BaseEntity, E extends Serializable> {
     
-    public ResponseEntity<BaseEntity> findById();
+    public ResponseEntity<T> findById(Long id) throws ResourceNotFoundException;
 }
