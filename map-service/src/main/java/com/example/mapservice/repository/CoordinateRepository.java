@@ -5,12 +5,12 @@
  */
 package com.example.mapservice.repository;
 
-import com.example.mapservice.model.Coordinate;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.mapservice.model.CoordinateEntity;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface CoordinateRepository extends JpaRepository<Coordinate, Long>{
+public interface CoordinateRepository extends BaseRepository<CoordinateEntity, Long>{
     
 }

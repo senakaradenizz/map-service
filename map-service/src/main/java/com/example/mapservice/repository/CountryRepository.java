@@ -5,13 +5,11 @@
  */
 package com.example.mapservice.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.mapservice.model.Country;
+import com.example.mapservice.model.CountryEntity;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface CountryRepository extends JpaRepository<Country, Long>{
-
-    public Country findByCountryName(String countryName);
+public interface CountryRepository extends BaseRepository<CountryEntity, Long> {
+    
 }

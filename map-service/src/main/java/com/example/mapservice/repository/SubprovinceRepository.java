@@ -5,12 +5,11 @@
  */
 package com.example.mapservice.repository;
 
-import com.example.mapservice.model.Subprovince;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.mapservice.model.SubprovinceEntity;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface SubprovinceRepository extends JpaRepository<Subprovince, Long>{
+public interface SubprovinceRepository extends BaseRepository<SubprovinceEntity, Long>{
     
 }
