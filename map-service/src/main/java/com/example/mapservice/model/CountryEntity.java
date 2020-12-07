@@ -16,6 +16,6 @@ import lombok.Data;
 @Table(name = "country")
 public class CountryEntity extends BaseEntity {
 
-    @Column(name = "country_name")
+    @Column(name = "name")
     private String countryName;
 }

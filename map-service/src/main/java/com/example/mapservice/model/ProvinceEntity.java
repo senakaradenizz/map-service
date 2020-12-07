@@ -16,6 +16,6 @@ import lombok.Data;
 @Table(name = "province")
 public class ProvinceEntity extends BaseEntity{
     
-    @Column(name = "province_name")
+    @Column(name = "name")
     private String provinceName;
 }
