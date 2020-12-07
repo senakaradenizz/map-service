@@ -17,7 +17,7 @@ import lombok.Data;
 public class ProvinceEntity extends BaseEntity{
     
     @Column(name = "name")
-    private String provinceName;
+    private String name;
     
     @Column(name = "country_id")
     private Long countryId;
