@@ -83,7 +83,7 @@
 
 const element = document.getElementById("getData");
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:8080/mapservice//eventdetails/1");
+    xhr.open("GET", "http://localhost:8080/mapservice/eventdetails/1");
     xhr.send();
     xhr.onreadystatechange = function () {
       if (this.readyState === 4) {
