@@ -5,7 +5,6 @@
  */
 package com.example.mapservice.model;
 
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -14,18 +13,12 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "event_details")
-public class EventDetailsEntity extends BaseEntity{
+@Table(name = "event")
+public class EventEntity extends BaseEntity{
     
-    @Column(name = "type")
-    private String eventType;
+    @Column(name = "latitude")
+    private Integer latitude;
     
-    @Column(name = "subtype")
-    private String eventSubtype;
-    
-    @Column(name = "date")
-    private Date eventDate;
-    
-    @Column(name = "priority")
-    private Integer eventPriority;
+    @Column(name = "longitude")
+    private Integer longitude;
 }
