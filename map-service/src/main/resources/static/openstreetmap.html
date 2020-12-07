@@ -29,7 +29,7 @@
     <p id="demo"></p>
     <script>
     // initialize Leaflet
-    var map = L.map('map').setView({lon: 0, lat: 0}, 2);
+    var map = L.map('map').setView([39.925533, 32.866287], 11);
 
     // add the OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -87,8 +87,8 @@ const element = document.getElementById("getData");
     xhr.send();
     xhr.onreadystatechange = function () {
       if (this.readyState === 4) {
-        if ((this.status == 200) && (this.status < 300)) {
-          console.log(this.responseText)
+        if ((this.status === 200) && (this.status < 300)) {
+          console.log(this.responseText);
         }
       }
     }
