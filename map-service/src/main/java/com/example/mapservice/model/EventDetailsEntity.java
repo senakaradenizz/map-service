@@ -28,4 +28,7 @@ public class EventDetailsEntity extends BaseEntity{
     
     @Column(name = "priority")
     private Integer eventPriority;
+    
+    @Column(name = "event_id")
+    private Long eventId;
 }

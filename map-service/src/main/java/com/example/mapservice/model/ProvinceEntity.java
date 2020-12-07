@@ -18,4 +18,7 @@ public class ProvinceEntity extends BaseEntity{
     
     @Column(name = "name")
     private String provinceName;
+    
+    @Column(name = "country_id")
+    private Long countryId;
 }

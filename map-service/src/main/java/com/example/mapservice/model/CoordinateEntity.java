@@ -21,4 +21,7 @@ public class CoordinateEntity extends BaseEntity{
     
     @Column(name = "longitude")
     private Integer longitude;
+    
+    @Column(name = "subprovince_id")
+    private Long subprovinceId;
 }
