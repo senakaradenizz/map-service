@@ -17,5 +17,8 @@ import lombok.Data;
 public class SubprovinceEntity extends BaseEntity{
     
     @Column(name = "name")
-    private String subprovinceName;
+    private String name;
+    
+    @Column(name = "province_id")
+    private Long provinceId;
 }

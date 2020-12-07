@@ -18,14 +18,17 @@ import lombok.Data;
 public class EventDetailsEntity extends BaseEntity{
     
     @Column(name = "type")
-    private String eventType;
+    private String type;
     
     @Column(name = "subtype")
-    private String eventSubtype;
+    private String subtype;
     
     @Column(name = "date")
-    private Date eventDate;
+    private Date date;
     
     @Column(name = "priority")
-    private Integer eventPriority;
+    private Integer priority;
+    
+    @Column(name = "event_id")
+    private Long eventId;
 }
