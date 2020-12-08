@@ -77,6 +77,10 @@ const element = document.getElementById("getData");
         }
     }
 
+    function loadAllCoordinates(data) {
+        
+    }
+
     function addCountry(currentCountry) {
             var option = document.createElement("option");
             option.text = currentCountry.name;
@@ -99,6 +103,18 @@ const element = document.getElementById("getData");
           success: function (data) {
             console.log(data);
             loadAllCountries(data);
+          },
+          error: function (error) {
+            console.log(`Error ${error}`);
+          }
+    })
+
+    $.ajax({
+          url: "http://192.168.30.90:8080/mapservice/coordinates",
+          type: "GET",
+          success: function (data) {
+            console.log(data);
+            loadAllCoordinates(data);
           },
           error: function (error) {
             console.log(`Error ${error}`);
