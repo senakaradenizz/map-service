@@ -21,6 +21,23 @@
     </style>
   </head>
   <body>
+    <div>
+      <select class="form-control" name="example" id="example">
+        <option value="0">Country</option>
+        <option th:each="dropdown : ${dropdown}" th:value="${dropdown.id}"
+          th:text="${dropdown.tagName}"></option>
+      </select> <select class="form-control" name="clientname" id="clientname">
+        <option value="0">Province</option>
+        <option th:each="dropd : ${drpdwn}" th:value="${dropd.id}"
+          th:text="${dropd.tagName}"></option>
+      </select>
+    </select> <select class="form-control" name="clientname" id="clientname">
+      <option value="0">Subprovince</option>
+      <option th:each="dropd : ${drpdwn}" th:value="${dropd.id}"
+        th:text="${dropd.tagName}"></option>
+    </select>
+      <button id="w-button-search" type="button">Search</button>
+    </div>
     <div id="map"></div>
     Polygon: <input type="text" name="coordPolygon" id="coordPolygon"/>
     <input type="button" onclick="drawPolygon()" value="Draw"/><br> 
@@ -95,7 +112,23 @@ const element = document.getElementById("getData");
         }
       }
     }
-    
+
+
+   $(document).ready(function() { // for client name 
+
+		$('#example').change(function(event) {
+			var country = $("select#example").val(); // country = define value of selected option
+			$.getJSON('ajaxAction0', {
+				ptype : country
+			}, function(data) {
+				var select = $('#clientname');
+				select.find('option').remove();
+				$.each(data, function(key, value) {
+					$('<option>').val(key).text(value).appendTo(select);
+				});
+			});
+		});
+	}); 
 
     drawMarkup();
 
