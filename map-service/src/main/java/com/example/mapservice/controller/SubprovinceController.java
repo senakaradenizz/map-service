@@ -8,8 +8,8 @@ package com.example.mapservice.controller;
 import com.example.mapservice.exception.ResourceNotFoundException;
 import com.example.mapservice.model.SubprovinceEntity;
 import com.example.mapservice.service.SubprovinceService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +27,9 @@ public class SubprovinceController implements BaseController{
         this.subprovinceService = subprovinceService;
     }
     
-    @GetMapping("/subprovinces/{id}")
+    @GetMapping("/subprovinces/{provinceId}")
     @Override
-    public ResponseEntity<SubprovinceEntity> findById(@PathVariable Long id) throws ResourceNotFoundException{
-        return subprovinceService.getSubprovinceById(id);
+    public List<SubprovinceEntity> findById(@PathVariable Long provinceId) throws ResourceNotFoundException{
+        return subprovinceService.getSubprovinceByProvinceId(provinceId);
     }
 }

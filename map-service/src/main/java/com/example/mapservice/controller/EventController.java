@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/mapservice")
-public class EventController implements BaseController{
+public class EventController {
     
     private EventService eventService;
     
@@ -28,7 +28,6 @@ public class EventController implements BaseController{
     }
     
     @GetMapping("/events/{id}")
-    @Override
     public ResponseEntity<EventEntity> findById(@PathVariable Long id) throws ResourceNotFoundException{
         return eventService.getEventById(id);
     }

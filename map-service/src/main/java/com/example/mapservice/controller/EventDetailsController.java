@@ -10,6 +10,7 @@ import com.example.mapservice.service.EventDetailsService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.mapservice.model.EventDetailsEntity;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,9 +28,9 @@ public class EventDetailsController implements BaseController{
         this.eventDetailsService = eventDetailsService;
     }
     
-    @GetMapping("/eventdetails/{id}")
+    @GetMapping("/eventdetails/{eventId}")  
     @Override
-    public ResponseEntity<EventDetailsEntity> findById(@PathVariable Long id) throws ResourceNotFoundException{
-        return eventDetailsService.getEventDetailsById(id);
+    public List<EventDetailsEntity> findById(@PathVariable Long eventId) throws ResourceNotFoundException{
+        return eventDetailsService.getEventDetailsByEventId(eventId);
     }
 }

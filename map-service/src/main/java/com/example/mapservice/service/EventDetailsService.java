@@ -8,6 +8,8 @@ package com.example.mapservice.service;
 import com.example.mapservice.exception.ResourceNotFoundException;
 import com.example.mapservice.repository.EventDetailsRepository;
 import com.example.mapservice.model.EventDetailsEntity;
+import java.util.List;
+import java.util.Optional;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,11 @@ public class EventDetailsService extends BaseServiceImpl{
         super(eventDetailsRepository);
     }
     
-    public ResponseEntity<EventDetailsEntity> getEventDetailsById(Long eventDetailsId)
+    public List<EventDetailsEntity> getEventDetailsByEventId(Long eventId)
             throws ResourceNotFoundException {
-	EventDetailsEntity eventDetailsEntity = eventDetailsRepository.findById(eventDetailsId)
-                                    .orElseThrow(() -> new ResourceNotFoundException("Event details not found for this id : " + eventDetailsId));
-	return ResponseEntity.ok().body(eventDetailsEntity);
+	Optional<List<EventDetailsEntity>> eventDetails = eventDetailsRepository.findByEventId(eventId);
+        if(eventDetails.isPresent()){
+            return eventDetails.get();
+        }return null;   
     }
 }
