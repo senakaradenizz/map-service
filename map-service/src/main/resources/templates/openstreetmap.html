@@ -22,27 +22,18 @@
   </head>
   <body>
     <div>
-      <select class="form-control" name="example" id="example">
+      <select class="form-control" name="example" id="countries" onchange="onChangeCountry()">
         <option value="0">Country</option>
-        <option th:each="dropdown : ${dropdown}" th:value="${dropdown.id}"
-          th:text="${dropdown.tagName}"></option>
-      </select> <select class="form-control" name="clientname" id="clientname">
+      </select> <select class="form-control" name="clientname" id="provinces">
         <option value="0">Province</option>
-        <option th:each="dropd : ${drpdwn}" th:value="${dropd.id}"
-          th:text="${dropd.tagName}"></option>
       </select>
-    </select> <select class="form-control" name="clientname" id="clientname">
-      <option value="0">Subprovince</option>
-      <option th:each="dropd : ${drpdwn}" th:value="${dropd.id}"
-        th:text="${dropd.tagName}"></option>
-    </select>
-      <button id="w-button-search" type="button">Search</button>
+      </select> <select class="form-control" name="clientname" id="clientname">
+        <option value="0">Subprovince</option>
+      </select>
+      <button id="w-button-search" type="button" onclick="getAreaOnClick()">Search</button>
     </div>
     <div id="map"></div>
-    Polygon: <input type="text" name="coordPolygon" id="coordPolygon"/>
-    <input type="button" onclick="drawPolygon()" value="Draw"/><br> 
-    Polyline: <input type="text" name="coordPolyline" id="coordPolyline"/>
-    <input type="button" onclick="drawPolyline()" value="Draw"/><br> 
+
     <p id="demo"></p>
     <script>
     // initialize Leaflet
@@ -61,49 +52,11 @@
     var drawnItems = new L.FeatureGroup();
     map.addLayer(drawnItems);
 
-    function drawPolygon() {
-            //var coords =  [[48,-3],[50,5],[44,11],[48,-3]] ;          
-            var coords = document.getElementById("coordPolygon").value;
-
-            var a = JSON.parse(coords);
-
-            var polygon = L.polygon(a, {color: 'red'});
-            polygon.addTo(map);
-
-            map.fitBounds(polygon.getBounds());
-        }
-
-    function drawPolyline() {
-        //var coords =  [[45,-122],[37,-122],[34,-118]] ;          
-        var coords = document.getElementById("coordPolyline").value;
-
-        var a = JSON.parse(coords);        
-
-            var polyline = L.polyline(a, {color: 'red'}).addTo(map);
-
-            map.fitBounds(polyline.getBounds());
-    }
-
-    function drawMarkup(){
-      var markup;
-
-            for (var l in locations) {
-              if (locations.hasOwnProperty(l)) {
-                  
-                var loc = [locations[l].latitude,locations[l].longitude];
-                console.log(loc)
-                markup = L.marker(loc).addTo(map);
-                  
-              }
-            }
-
-      }
-
 
 //http get request
 const element = document.getElementById("getData");
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:8080/mapservice/eventdetails/1");
+    xhr.open("GET", "http://192.168.30.90:8080/mapservice/eventdetails/1");
     xhr.send();
     xhr.onreadystatechange = function () {
       if (this.readyState === 4) {
@@ -114,24 +67,44 @@ const element = document.getElementById("getData");
     }
 
 
-   $(document).ready(function() { // for client name 
+    var countries = document.getElementById("countries");
+    var provinces = document.getElementById("provinces");
 
-		$('#example').change(function(event) {
-			var country = $("select#example").val(); // country = define value of selected option
-			$.getJSON('ajaxAction0', {
-				ptype : country
-			}, function(data) {
-				var select = $('#clientname');
-				select.find('option').remove();
-				$.each(data, function(key, value) {
-					$('<option>').val(key).text(value).appendTo(select);
-				});
-			});
-		});
-	}); 
+    function loadAllCountries(data) {
+        for (var i = 0; i < data.length; i++) {
+            var currentCountry = data[i];
+                addCountry(currentCountry);
+        }
+    }
 
-    drawMarkup();
+    function addCountry(currentCountry) {
+            var option = document.createElement("option");
+            option.text = currentCountry.name;
+            option.value = currentCountry.id;
+            countries.appendChild(option);
+    }
 
+    function addProvinces(data) {
+            
+                var option = document.createElement("option");
+                option.text = data.name;
+                option.value = data.id;
+                provinces.appendChild(option);
+                provinces.selectedIndex = 0;
+    }
+    
+    $.ajax({
+          url: "http://192.168.30.90:8080/mapservice/countries",
+          type: "GET",
+          success: function (data) {
+            console.log(data);
+            loadAllCountries(data);
+          },
+          error: function (error) {
+            console.log(`Error ${error}`);
+          }
+    })
+    
     </script>
   </body>
 </html>
