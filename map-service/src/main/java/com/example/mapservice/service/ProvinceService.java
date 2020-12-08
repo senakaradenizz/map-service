@@ -8,6 +8,8 @@ package com.example.mapservice.service;
 import com.example.mapservice.exception.ResourceNotFoundException;
 import com.example.mapservice.model.ProvinceEntity;
 import com.example.mapservice.repository.ProvinceRepository;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,5 +32,14 @@ public class ProvinceService extends BaseServiceImpl{
 	ProvinceEntity province = provinceRepository.findById(provinceId)
                                     .orElseThrow(() -> new ResourceNotFoundException("Province not found for this id : " + provinceId));
 	return ResponseEntity.ok().body(province);
+    }
+    
+    public List<ProvinceEntity> getProvinceByCountryId(Long countryId)
+            throws ResourceNotFoundException {
+	Optional<List<ProvinceEntity>> province = provinceRepository.findByCountryId(countryId);
+        if(province.isPresent()){
+            return province.get();
+        }return null;
+        
     }
 }

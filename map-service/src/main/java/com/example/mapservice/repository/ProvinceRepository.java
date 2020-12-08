@@ -6,10 +6,12 @@
 package com.example.mapservice.repository;
 
 import com.example.mapservice.model.ProvinceEntity;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
 public interface ProvinceRepository extends BaseRepository<ProvinceEntity, Long>{
-    
+    Optional<List<ProvinceEntity>> findByCountryId(Long id);
 }

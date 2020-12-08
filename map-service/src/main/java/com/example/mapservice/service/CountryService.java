@@ -26,14 +26,7 @@ public class CountryService extends BaseServiceImpl{
     }
     
     public List<CountryEntity> getAllCountries(){
-         List<CountryEntity> resultList= countryRepository.findAll();
+        List<CountryEntity> resultList= countryRepository.findAll();
         return resultList;
-    }
-    
-    public ResponseEntity<CountryEntity> getCountryById(Long countryId)
-            throws ResourceNotFoundException {
-	CountryEntity country = countryRepository.findById(countryId)
-                                    .orElseThrow(() -> new ResourceNotFoundException("Country not found for this id : " + countryId));
-	return ResponseEntity.ok().body(country);
     }
 }
