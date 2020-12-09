@@ -172,103 +172,46 @@
 
     // Populate provinces related to selected country on change country drop-down
     function onChangeProvince() {
-            $.ajax({
-                      url: "http://192.168.30.90:8080/mapservice/countries",
-                      type: "GET",
-                      success: function (data) {
-                        var selectedCountry = data.find(findCountryById);
-                        $.ajax({
-                          url: "http://192.168.30.90:8080/mapservice/provinces/" + selectedCountry.id,
-                          type: "GET",
-                          success: function (data) {
-                            var selectedProvince = data.find(findProvinceById);
-                            clearDropdownlist(subprovinces);
-                            addSubprovince(selectedProvince);
-                            console.log(selectedProvince);
-                          },
-                        error: function (error) {
-                          console.log(`Error ${error}`);
-                        }
-                        })
-                      },
-                      error: function (error) {
-                        console.log(`Error ${error}`);
-                      }
-                    })
+      $.ajax({
+        url: "http://192.168.30.90:8080/mapservice/countries",
+        type: "GET",
+        success: function (data) {
+          var selectedCountry = data.find(findCountryById);
+          $.ajax({
+            url: "http://192.168.30.90:8080/mapservice/provinces/" + selectedCountry.id,
+            type: "GET",
+            success: function (data) {
+              var selectedProvince = data.find(findProvinceById);
+              clearDropdownlist(subprovinces);
+              addSubprovince(selectedProvince);
+              console.log(selectedProvince);
+            },
+            error: function (error) {
+              console.log(`Error ${error}`);
+            }
+          })
+        },
+        error: function (error) {
+          console.log(`Error ${error}`);
+        }
+      })
     }
 
     // Empty marker and circle
     var marker = L.marker();
     var circle = L.circle();
-    // Search function
-    function getAreaOnClick() {
-      $.ajax({
-                      url: "http://192.168.30.90:8080/mapservice/countries",
-                      type: "GET",
-                      success: function (data) {
-                        var selectedCountry = data.find(findCountryById);
-                        $.ajax({
-                          url: "http://192.168.30.90:8080/mapservice/provinces/" + selectedCountry.id,
-                          type: "GET",
-                          success: function (data) {
-                            var selectedProvince = data.find(findProvinceById);
-                            $.ajax({
-                              url: "http://192.168.30.90:8080/mapservice/subprovinces/" + selectedProvince.id,
-                              type: "GET",
-                              success: function (data) {
-                                var selectedSubprovince = data.find(findSubprovinceById);
-                                $.ajax({
-                                  url: "http://192.168.30.90:8080/mapservice/coordinates/" + selectedSubprovince.id,
-                                  type: "GET",
-                                  success: function (data) {
-                                    console.log(data);
-                                    var searchRadius = document.getElementById("radius").value;
-                                    var latLng = [data[0].latitude * 1e-6, data[0].longitude * 1e-6];
-                                    map.setView(latLng, 14);
-                                    marker
-                                    .setLatLng(latLng);
-                                    circle
-                                    .setLatLng(latLng)
-                                    .setStyle({
-                                        color: 'red',
-                                        fillColor: '#f03',
-                                        fillOpacity: 0.2
-                                    })
-                                    .setRadius(searchRadius);
-                                    map.addLayer(marker);
-                                    map.addLayer(circle);
-                                  },
-                                  error: function (error) {
-                                    console.log(`Error ${error}`);
-                                  }
-                                })
-                              },
-                              error: function (error) {
-                                console.log(`Error ${error}`);
-                              }
-                            })
-                          },
-                          error: function (error) {
-                            console.log(`Error ${error}`);
-                          }
-                        })
-                      },
-                      error: function (error) {
-                        console.log(`Error ${error}`);
-                      }
-            })
+    
+    // Get search radius from user input
+    function getSearchRadius(){
+      var searchRadius = document.getElementById("radius").value;
+      return searchRadius;
     }
 
-    // Manual search function
-    function getAreaOnClickManualInput(){
-      var latitude = document.getElementById("latitude").value;
-      var longitude = document.getElementById("longitude").value;
-      var searchRadius = document.getElementById("radius").value;
-      var latLng = [latitude, longitude];
+    // Put marker and circle to selected latitude and longitude
+    function putMarkerDrawCircle(latLng, searchRadius){
       map.setView(latLng, 14);
       marker
-      .setLatLng(latLng)
-      .addTo(map);
+      .setLatLng(latLng);
       circle
       .setLatLng(latLng)
       .setStyle({
@@ -276,21 +219,78 @@
         fillColor: '#f03',
         fillOpacity: 0.2
       })
-      .setRadius(searchRadius)
-      .addTo(map);
+      .setRadius(searchRadius);
+      map.addLayer(marker);
+      map.addLayer(circle);
+    }
+
+    // Search function
+    function getAreaOnClick() {
+      $.ajax({
+            url: "http://192.168.30.90:8080/mapservice/countries",
+            type: "GET",
+            success: function (data) {
+              var selectedCountry = data.find(findCountryById);
+              $.ajax({
+                url: "http://192.168.30.90:8080/mapservice/provinces/" + selectedCountry.id,
+                type: "GET",
+                success: function (data) {
+                  var selectedProvince = data.find(findProvinceById);
+                  $.ajax({
+                    url: "http://192.168.30.90:8080/mapservice/subprovinces/" + selectedProvince.id,
+                    type: "GET",
+                    success: function (data) {
+                      var selectedSubprovince = data.find(findSubprovinceById);
+                      $.ajax({
+                        url: "http://192.168.30.90:8080/mapservice/coordinates/" + selectedSubprovince.id,
+                        type: "GET",
+                        success: function (data) {
+                          console.log(data);
+                          var latLng = [data[0].latitude * 1e-6, data[0].longitude * 1e-6];
+                          var searchRadius = getSearchRadius();
+                          putMarkerDrawCircle(latLng, searchRadius);
+                        },
+                        error: function (error) {
+                          console.log(`Error ${error}`);
+                        }
+                      })
+                    },
+                    error: function (error) {
+                      console.log(`Error ${error}`);
+                    }
+                  })
+                },
+                 error: function (error) {
+                  console.log(`Error ${error}`);
+                }
+              })
+            },
+            error: function (error) {
+              console.log(`Error ${error}`);
+            }
+          })
+    }
+
+    // Manual search function
+    function getAreaOnClickManualInput(){
+      var latitude = document.getElementById("latitude").value;
+      var longitude = document.getElementById("longitude").value;
+      var latLng = [latitude, longitude];
+      var searchRadius = getSearchRadius();
+      putMarkerDrawCircle(latLng, searchRadius);
       console.log(circle.getBounds());      
     }
                      
     // Get request for countries
     $.ajax({
-          url: "http://192.168.30.90:8080/mapservice/countries",
-          type: "GET",
-          success: function (data) {
-            loadAllCountries(data);
-          },
-          error: function (error) {
-            console.log(`Error ${error}`);
-          }
+      url: "http://192.168.30.90:8080/mapservice/countries",
+      type: "GET",
+      success: function (data) {
+        loadAllCountries(data);
+      },
+      error: function (error) {
+        console.log(`Error ${error}`);
+      }
     })
 
     </script>
