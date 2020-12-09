@@ -207,9 +207,33 @@
       return searchRadius;
     }
 
+    // Set zoom level based on search radius
+    function setMapView(latLng, searchRadius){
+      var zoomLevel;
+      if(searchRadius <= 100){
+        zoomLevel = 19;
+      } else if(searchRadius > 100 && searchRadius <= 200){
+        zoomLevel = 18;
+      } else if(searchRadius > 200 && searchRadius <= 400){
+        zoomLevel = 17;
+      } else if(searchRadius > 400 && searchRadius <= 800){
+        zoomLevel = 16;
+      } else if(searchRadius > 800 && searchRadius <= 1600){
+        zoomLevel = 15;
+      } else if(searchRadius > 1600 && searchRadius <= 3200){
+        zoomLevel = 14;
+      } else if(searchRadius > 3200 && searchRadius <= 6400){
+        zoomLevel = 13;
+      } else if(searchRadius > 6400 && searchRadius <= 12800){
+        zoomLevel = 12;
+      } else{
+        zoomLevel = 11;
+      }
+      map.setView(latLng, zoomLevel);
+    }
+
     // Put marker and circle to selected latitude and longitude
     function putMarkerDrawCircle(latLng, searchRadius){
-      map.setView(latLng, 14);
       marker
       .setLatLng(latLng);
       circle
@@ -248,6 +272,7 @@
                           console.log(data);
                           var latLng = [data[0].latitude * 1e-6, data[0].longitude * 1e-6];
                           var searchRadius = getSearchRadius();
+                          setMapView(latLng, searchRadius);
                           putMarkerDrawCircle(latLng, searchRadius);
                         },
                         error: function (error) {
@@ -277,8 +302,8 @@
       var longitude = document.getElementById("longitude").value;
       var latLng = [latitude, longitude];
       var searchRadius = getSearchRadius();
-      putMarkerDrawCircle(latLng, searchRadius);
-      console.log(circle.getBounds());      
+      setMapView(latLng, searchRadius);
+      putMarkerDrawCircle(latLng, searchRadius);     
     }
                      
     // Get request for countries
