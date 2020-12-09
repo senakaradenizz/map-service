@@ -151,6 +151,7 @@
               console.log(data);
               var selectedCountry = data.find(findCountryById);
               clearDropdownlist(provinces);
+              clearDropdownlist(subprovinces);
               addProvince(selectedCountry);
               console.log(selectedCountry);
               },
