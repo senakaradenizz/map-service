@@ -77,12 +77,14 @@
               type: "GET",
               success: function (data) {
                 console.log(data);
+                
                 for (var i = 0; i < data.length; i++){
                   var option = document.createElement("option");
                   option.text = data[i].name;
                   option.value = data[i].id;
                   provinces.appendChild(option);
                 }
+
                 provinces.selectedIndex = 0;
               },
               error: function (error) {
@@ -122,13 +124,22 @@
     // Find selected province id
     function findProvinceById(province) {
             return province.id == provinces.value;
-    }    
+    }
+    
+    // Find selected subprovince id
+    function findSubprovinceById(subprovince) {
+            return subprovince.id == subprovinces.value;
+    }        
 
     // Clear drop-down list
     function clearDropdownlist(ddl) {
             while (ddl.firstChild) {
                 ddl.removeChild(ddl.firstChild);
             }
+            var option = document.createElement("option");
+            option.text = "--Select--";
+            option.value = 0;
+            ddl.appendChild(option);
     }
 
     // Populate provinces related to selected country on change country drop-down
@@ -175,6 +186,51 @@
                       }
                     })
     }
+
+    function getAreaOnClick() {
+      $.ajax({
+                      url: "http://192.168.30.90:8080/mapservice/countries",
+                      type: "GET",
+                      success: function (data) {
+                        var selectedCountry = data.find(findCountryById);
+                        $.ajax({
+                          url: "http://192.168.30.90:8080/mapservice/provinces/" + selectedCountry.id,
+                          type: "GET",
+                          success: function (data) {
+                            var selectedProvince = data.find(findProvinceById);
+                            $.ajax({
+                              url: "http://192.168.30.90:8080/mapservice/subprovinces/" + selectedProvince.id,
+                              type: "GET",
+                              success: function (data) {
+                                var selectedSubprovince = data.find(findSubprovinceById);
+                                $.ajax({
+                                  url: "http://192.168.30.90:8080/mapservice/coordinates/" + selectedSubprovince.id,
+                                  type: "GET",
+                                  success: function (data) {
+                                    console.log(data);
+                                    latLng = [data[0].latitude * 1e-6, data[0].longitude * 1e-6];
+                                    map.setView(latLng, 14);
+                                  },
+                                  error: function (error) {
+                                    console.log(`Error ${error}`);
+                                  }
+                                })
+                              },
+                              error: function (error) {
+                                console.log(`Error ${error}`);
+                              }
+                            })
+                          },
+                          error: function (error) {
+                            console.log(`Error ${error}`);
+                          }
+                        })
+                      },
+                      error: function (error) {
+                        console.log(`Error ${error}`);
+                      }
+            })
+    }
                      
     // Get request for countries
     $.ajax({
@@ -187,6 +243,8 @@
             console.log(`Error ${error}`);
           }
     })
+
+
     
     </script>
   </body>
