@@ -23,10 +23,10 @@
     <div>
       <select class="form-control" name="example" id="countries" onchange="onChangeCountry()">
         <option value="0">Country</option>
-      </select> <select class="form-control" name="clientname" id="provinces">
+      </select> <select class="form-control" name="clientname" id="provinces" onchange="onChangeProvince()">
         <option value="0">Province</option>
       </select>
-      </select> <select class="form-control" name="clientname" id="clientname">
+      </select> <select class="form-control" name="clientname" id="subprovinces">
         <option value="0">Subprovince</option>
       </select>
       <button id="w-button-search" type="button" onclick="getAreaOnClick()">Search</button>
@@ -88,14 +88,41 @@
               error: function (error) {
                 console.log(`Error ${error}`);
               }
+            })    
+    }
+
+    // Add each subprovince one by one for selected province
+    function addSubprovince(currentProvince) {
+            var provinceId = currentProvince.id;
+            $.ajax({
+              url: "http://192.168.30.90:8080/mapservice/subprovinces/" + provinceId,
+              type: "GET",
+              success: function (data) {
+                console.log(data);
+                for (var i = 0; i < data.length; i++){
+                  var option = document.createElement("option");
+                  option.text = data[i].name;
+                  option.value = data[i].id;
+                  subprovinces.appendChild(option);
+                }
+                subprovinces.selectedIndex = 0;
+              },
+              error: function (error) {
+                console.log(`Error ${error}`);
+              }
             })
             
     }
 
     // Find selected country id
-    function findById(country) {
+    function findCountryById(country) {
             return country.id == countries.value;
     }
+
+    // Find selected province id
+    function findProvinceById(province) {
+            return province.id == provinces.value;
+    }    
 
     // Clear drop-down list
     function clearDropdownlist(ddl) {
@@ -111,7 +138,7 @@
             type: "GET",
             success: function (data) {
               console.log(data);
-              var selectedCountry = data.find(findById);
+              var selectedCountry = data.find(findCountryById);
               clearDropdownlist(provinces);
               addProvince(selectedCountry);
               console.log(selectedCountry);
@@ -122,12 +149,38 @@
             })
     }
 
+    // Populate provinces related to selected country on change country drop-down
+    function onChangeProvince() {
+            $.ajax({
+                      url: "http://192.168.30.90:8080/mapservice/countries",
+                      type: "GET",
+                      success: function (data) {
+                        var selectedCountry = data.find(findCountryById);
+                        $.ajax({
+                          url: "http://192.168.30.90:8080/mapservice/provinces/" + selectedCountry.id,
+                          type: "GET",
+                          success: function (data) {
+                            var selectedProvince = data.find(findProvinceById);
+                            clearDropdownlist(subprovinces);
+                            addSubprovince(selectedProvince);
+                            console.log(selectedProvince);
+                          },
+                        error: function (error) {
+                          console.log(`Error ${error}`);
+                        }
+                        })
+                      },
+                      error: function (error) {
+                        console.log(`Error ${error}`);
+                      }
+                    })
+    }
+                     
     // Get request for countries
     $.ajax({
           url: "http://192.168.30.90:8080/mapservice/countries",
           type: "GET",
           success: function (data) {
-            console.log(data);
             loadAllCountries(data);
           },
           error: function (error) {
