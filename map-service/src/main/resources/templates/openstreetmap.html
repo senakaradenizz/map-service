@@ -32,10 +32,12 @@
       <button id="w-button-search" type="button" onclick="getAreaOnClick()">Search</button>
     </div>
     <div>
-      <label for="fname">Latitude:</label>
+      <label for="latitude">Latitude:</label>
       <input type="text" id="latitude" name="latitude" style="width: 54px;">
-      <label for="fname">Longitude:</label>
+      <label for="longitude">Longitude:</label>
       <input type="text" id="longitude" name="longitude" style="width: 54px;">
+      <label for="radius">Radius(m):</label>
+      <input type="text" id="radius" name="radius" style="width: 54px;">
       <button id="w-button-search" type="button" onclick="getAreaOnClickManualInput()">Search</button>
     </div>
     <div id="map"></div>
@@ -195,6 +197,9 @@
                     })
     }
 
+    // Empty marker and circle
+    var marker = L.marker();
+    var circle = L.circle();
     // Search function
     function getAreaOnClick() {
       $.ajax({
@@ -217,8 +222,21 @@
                                   type: "GET",
                                   success: function (data) {
                                     console.log(data);
+                                    var searchRadius = document.getElementById("radius").value;
                                     var latLng = [data[0].latitude * 1e-6, data[0].longitude * 1e-6];
                                     map.setView(latLng, 14);
+                                    marker
+                                    .setLatLng(latLng);
+                                    circle
+                                    .setLatLng(latLng)
+                                    .setStyle({
+                                        color: 'red',
+                                        fillColor: '#f03',
+                                        fillOpacity: 0.2
+                                    })
+                                    .setRadius(searchRadius);
+                                    map.addLayer(marker);
+                                    map.addLayer(circle);
                                   },
                                   error: function (error) {
                                     console.log(`Error ${error}`);
@@ -245,8 +263,22 @@
     function getAreaOnClickManualInput(){
       var latitude = document.getElementById("latitude").value;
       var longitude = document.getElementById("longitude").value;
+      var searchRadius = document.getElementById("radius").value;
       var latLng = [latitude, longitude];
       map.setView(latLng, 14);
+      marker
+      .setLatLng(latLng)
+      .addTo(map);
+      circle
+      .setLatLng(latLng)
+      .setStyle({
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.2
+      })
+      .setRadius(searchRadius)
+      .addTo(map);
+      console.log(circle.getBounds());      
     }
                      
     // Get request for countries
@@ -261,8 +293,6 @@
           }
     })
 
-
-    
     </script>
   </body>
 </html>
