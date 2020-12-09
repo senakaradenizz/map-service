@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-    <script src="/home/sena/Desktop/OSM/leaflet.ajax.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
     <style>
@@ -48,39 +47,21 @@
 
     // show the scale bar on the lower left corner
     L.control.scale().addTo(map);
-    
-    var drawnItems = new L.FeatureGroup();
-    map.addLayer(drawnItems);
-
-
-//http get request
-const element = document.getElementById("getData");
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://192.168.30.90:8080/mapservice/eventdetails/1");
-    xhr.send();
-    xhr.onreadystatechange = function () {
-      if (this.readyState === 4) {
-        if ((this.status === 200) && (this.status < 300)) {
-          console.log(this.responseText);
-        }
-      }
-    }
-
 
     var countries = document.getElementById("countries");
     var provinces = document.getElementById("provinces");
+    var subprovinces = document.getElementById("subprovinces");
+    var coordinates = document.getElementById("coordinates");
 
+    // Load all countries from database
     function loadAllCountries(data) {
         for (var i = 0; i < data.length; i++) {
             var currentCountry = data[i];
                 addCountry(currentCountry);
         }
     }
-
-    function loadAllCoordinates(data) {
-        
-    }
-
+    
+    // Add each country one by one
     function addCountry(currentCountry) {
             var option = document.createElement("option");
             option.text = currentCountry.name;
@@ -88,33 +69,66 @@ const element = document.getElementById("getData");
             countries.appendChild(option);
     }
 
-    function addProvinces(data) {
-            
-                var option = document.createElement("option");
-                option.text = data.name;
-                option.value = data.id;
-                provinces.appendChild(option);
+    // Add each province one by one for selected country
+    function addProvince(currentCountry) {
+            var countryId = currentCountry.id;
+            $.ajax({
+              url: "http://192.168.30.90:8080/mapservice/provinces/" + countryId,
+              type: "GET",
+              success: function (data) {
+                console.log(data);
+                for (var i = 0; i < data.length; i++){
+                  var option = document.createElement("option");
+                  option.text = data[i].name;
+                  option.value = data[i].id;
+                  provinces.appendChild(option);
+                }
                 provinces.selectedIndex = 0;
+              },
+              error: function (error) {
+                console.log(`Error ${error}`);
+              }
+            })
+            
     }
-    
+
+    // Find selected country id
+    function findById(country) {
+            return country.id == countries.value;
+    }
+
+    // Clear drop-down list
+    function clearDropdownlist(ddl) {
+            while (ddl.firstChild) {
+                ddl.removeChild(ddl.firstChild);
+            }
+    }
+
+    // Populate provinces related to selected country on change country drop-down
+    function onChangeCountry() {
+            $.ajax({
+            url: "http://192.168.30.90:8080/mapservice/countries",
+            type: "GET",
+            success: function (data) {
+              console.log(data);
+              var selectedCountry = data.find(findById);
+              clearDropdownlist(provinces);
+              addProvince(selectedCountry);
+              console.log(selectedCountry);
+              },
+            error: function (error) {
+              console.log(`Error ${error}`);
+              }
+            })
+    }
+
+    // Get request for countries
     $.ajax({
           url: "http://192.168.30.90:8080/mapservice/countries",
           type: "GET",
           success: function (data) {
             console.log(data);
             loadAllCountries(data);
-          },
-          error: function (error) {
-            console.log(`Error ${error}`);
-          }
-    })
-
-    $.ajax({
-          url: "http://192.168.30.90:8080/mapservice/coordinates",
-          type: "GET",
-          success: function (data) {
-            console.log(data);
-            loadAllCoordinates(data);
           },
           error: function (error) {
             console.log(`Error ${error}`);
