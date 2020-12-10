@@ -198,7 +198,6 @@
     }
 
     // Empty marker, circle and event marker array
-    var marker = L.marker();
     var circle = L.circle();
     var eventMarkerArr = new Array();
     
@@ -208,15 +207,13 @@
       return searchRadius;
     }
 
-    // Set active circle view on map
+    // Set displayed map based on circle
     function setBounds(bounds){
       map.fitBounds(bounds);
     }
 
     // Put marker and circle to selected latitude and longitude
     function putMarkerDrawCircle(latLng, searchRadius){
-      marker
-      .setLatLng(latLng);
       circle
       .setLatLng(latLng)
       .setStyle({
@@ -225,7 +222,6 @@
         fillOpacity: 0.2
       })
       .setRadius(searchRadius);
-      map.addLayer(marker);
       map.addLayer(circle);
     }
     ////////////////////// WORK IN PROGRESS //////////////////////////////////
