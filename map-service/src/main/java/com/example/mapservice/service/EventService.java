@@ -31,10 +31,5 @@ public class EventService extends BaseServiceImpl{
 	return ResponseEntity.ok().body(eventEntity);
     }
     
-    public List<EventEntity> getAllEventsInRange(){
-        List<EventEntity> resultList= eventRepository.findAll();
-        return resultList;
-    }
-    
     
 }
