@@ -197,9 +197,10 @@
       })
     }
 
-    // Empty marker and circle
+    // Empty marker, circle and event marker array
     var marker = L.marker();
     var circle = L.circle();
+    var eventMarkerArr = new Array();
     
     // Get search radius from user input
     function getSearchRadius(){
@@ -207,29 +208,9 @@
       return searchRadius;
     }
 
-    // Set zoom level based on search radius
-    function setMapView(latLng, searchRadius){
-      var zoomLevel;
-      if(searchRadius <= 100){
-        zoomLevel = 19;
-      } else if(searchRadius > 100 && searchRadius <= 200){
-        zoomLevel = 18;
-      } else if(searchRadius > 200 && searchRadius <= 400){
-        zoomLevel = 17;
-      } else if(searchRadius > 400 && searchRadius <= 800){
-        zoomLevel = 16;
-      } else if(searchRadius > 800 && searchRadius <= 1600){
-        zoomLevel = 15;
-      } else if(searchRadius > 1600 && searchRadius <= 3200){
-        zoomLevel = 14;
-      } else if(searchRadius > 3200 && searchRadius <= 6400){
-        zoomLevel = 13;
-      } else if(searchRadius > 6400 && searchRadius <= 12800){
-        zoomLevel = 12;
-      } else{
-        zoomLevel = 11;
-      }
-      map.setView(latLng, zoomLevel);
+    // Set active circle view on map
+    function setBounds(bounds){
+      map.fitBounds(bounds);
     }
 
     // Put marker and circle to selected latitude and longitude
@@ -247,7 +228,47 @@
       map.addLayer(marker);
       map.addLayer(circle);
     }
+    ////////////////////// WORK IN PROGRESS //////////////////////////////////
+    // Get active circle's latitudes and longitudes
+    function getActiveCircleBounds() {
+      var circleBounds = circle.getBounds();
+      console.log(circleBounds);
+      return circleBounds;
+    }
 
+    function markLocationsInBounds(eventMarkerArr, bounds) {
+      var northEastLat = bounds._northEast.lat;
+      var northEastLng = bounds._northEast.lng;
+      var southWestLat = bounds._southWest.lat;
+      var southWestLng = bounds._southWest.lng;
+
+    $.ajax({
+      url: "http://192.168.30.90:8080/mapservice/events/" + 2,
+      type: "GET",
+      success: function (data) {
+        console.log(data);
+        for (var i = 0; i < 1; i++) {
+          var lat = data.latitude * 1e-6;
+          var lng = data.longitude * 1e-6;
+          latLng = [lat, lng];
+          console.log(latLng);
+          var marker = new L.marker(latLng);
+          eventMarkerArr.push(marker);
+          console.log(marker);
+          // show a marker on the map
+          if(eventMarkerArr[i]._latlng.lat < northEastLat && eventMarkerArr[i]._latlng.lat > southWestLat && eventMarkerArr[i]._latlng.lng < northEastLng && eventMarkerArr[i]._latlng.lng > southWestLng) {
+            map.addLayer(eventMarkerArr[i]);
+            } else {
+            map.removeLayer(eventMarkerArr[i]);
+          } 
+        }
+      },
+      error: function (error) {
+        console.log(`Error ${error}`);
+        }
+      })
+    }
+    ////////////////////// WORK IN PROGRESS //////////////////////////////////
     // Search function
     function getAreaOnClick() {
       $.ajax({
@@ -272,8 +293,10 @@
                           console.log(data);
                           var latLng = [data[0].latitude * 1e-6, data[0].longitude * 1e-6];
                           var searchRadius = getSearchRadius();
-                          setMapView(latLng, searchRadius);
                           putMarkerDrawCircle(latLng, searchRadius);
+                          var circleBounds = getActiveCircleBounds();
+                          setBounds(circleBounds);
+                          markLocationsInBounds(eventMarkerArr, circleBounds);
                         },
                         error: function (error) {
                           console.log(`Error ${error}`);
@@ -302,8 +325,10 @@
       var longitude = document.getElementById("longitude").value;
       var latLng = [latitude, longitude];
       var searchRadius = getSearchRadius();
-      setMapView(latLng, searchRadius);
-      putMarkerDrawCircle(latLng, searchRadius);     
+      putMarkerDrawCircle(latLng, searchRadius);
+      var circleBounds = getActiveCircleBounds();
+      setBounds(circleBounds);
+      markLocationsInBounds(eventMarkerArr, circleBounds);     
     }
                      
     // Get request for countries
