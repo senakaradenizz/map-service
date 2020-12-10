@@ -212,8 +212,8 @@
       map.fitBounds(bounds);
     }
 
-    // Put marker and circle to selected latitude and longitude
-    function putMarkerDrawCircle(latLng, searchRadius){
+    // Put circle to the selected latitude and longitude
+    function drawCircle(latLng, searchRadius){
       circle
       .setLatLng(latLng)
       .setStyle({
@@ -289,7 +289,7 @@
                           console.log(data);
                           var latLng = [data[0].latitude * 1e-6, data[0].longitude * 1e-6];
                           var searchRadius = getSearchRadius();
-                          putMarkerDrawCircle(latLng, searchRadius);
+                          drawCircle(latLng, searchRadius);
                           var circleBounds = getActiveCircleBounds();
                           setBounds(circleBounds);
                           markLocationsInBounds(eventMarkerArr, circleBounds);
@@ -321,7 +321,7 @@
       var longitude = document.getElementById("longitude").value;
       var latLng = [latitude, longitude];
       var searchRadius = getSearchRadius();
-      putMarkerDrawCircle(latLng, searchRadius);
+      drawCircle(latLng, searchRadius);
       var circleBounds = getActiveCircleBounds();
       setBounds(circleBounds);
       markLocationsInBounds(eventMarkerArr, circleBounds);     
