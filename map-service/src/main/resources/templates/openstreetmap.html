@@ -62,6 +62,18 @@
     var subprovinces = document.getElementById("subprovinces");
     var coordinates = document.getElementById("coordinates");
 
+    // Get request for countries
+    $.ajax({
+      url: "http://192.168.30.90:8080/mapservice/countries",
+      type: "GET",
+      success: function (data) {
+        loadAllCountries(data);
+      },
+      error: function (error) {
+        console.log(`Error ${error}`);
+      }
+    })
+
     // Load all countries from database
     function loadAllCountries(data) {
         for (var i = 0; i < data.length; i++) {
@@ -197,9 +209,11 @@
       })
     }
 
-    // Empty marker, circle and event marker array
+    // Empty circle
     var circle = L.circle();
-    var eventMarkerArr = new Array();
+
+    //Emty marker array
+    var markerArr = new Array();
     
     // Get search radius from user input
     function getSearchRadius(){
@@ -234,13 +248,19 @@
     }
 
     function markLocationsInCircle(data) {
-        var markerArr = new Array();
         for (var i = 0; i < data.length; i++) {
           var lat = data[i].latitude;
           var lng = data[i].longitude;
           latLng = [lat, lng];
           var marker = new L.marker(latLng);
+          markerArr.push(marker);
           map.addLayer(marker);
+        }
+      }
+
+    function deleteMarkLocationsInCircle() {
+        for (var i = 0; i < markerArr.length; i++) {
+          map.removeLayer(markerArr[i]);
         }
       }
 
@@ -276,6 +296,7 @@
                             type: "GET",
                             success: function (data) {
                               console.log(data);
+                              deleteMarkLocationsInCircle();
                               markLocationsInCircle(data);
                             },
                             error: function (error) {
@@ -313,33 +334,21 @@
       var searchRadius = getSearchRadius();
       drawCircle(latLng, searchRadius);
       var circleBounds = getActiveCircleBounds();
-      
+      setBounds(circleBounds); 
       $.ajax({
         url: "http://192.168.30.90:8080/mapservice/eventsinrange/" + latitude + "/" + longitude + "/" + searchRadius,
         type: "GET",
         success: function (data) {
           console.log(data);
+          deleteMarkLocationsInCircle();
           markLocationsInCircle(data);
         },
         error: function (error) {
           console.log(`Error ${error}`);
         }
       })
-      setBounds(circleBounds);
-      // TODO: POST radius and circle bounds to service    
+       
     }
-                     
-    // Get request for countries
-    $.ajax({
-      url: "http://192.168.30.90:8080/mapservice/countries",
-      type: "GET",
-      success: function (data) {
-        loadAllCountries(data);
-      },
-      error: function (error) {
-        console.log(`Error ${error}`);
-      }
-    })
 
     </script>
   </body>
