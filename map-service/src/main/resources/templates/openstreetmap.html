@@ -32,6 +32,18 @@
       <button id="w-button-search" type="button" onclick="getAreaOnClick()">Search</button>
     </div>
     <div>
+      <select class="form-control" name="example" id="eventType">
+        <option value="0">Event Type</option>
+        <option value="1">Terror</option>
+        <option value="2">Natural Disaster</option>
+        <option value="3">Crime</option>
+      </select>
+        <label for="start">Date:</label>
+        <input type="date" id="start" name="trip-start"
+               value="0"
+               min="2010-01-01" max="2021-01-01">
+    </div>
+    <div>
       <label for="latitude">Latitude:</label>
       <input type="text" id="latitude" name="latitude" style="width: 54px;">
       <label for="longitude">Longitude:</label>
@@ -41,8 +53,6 @@
       <button id="w-button-search" type="button" onclick="getAreaOnClickManualInput()">Search</button>
     </div>
     <div id="map"></div>
-
-    <p id="demo"></p>
     <script>
     // initialize Leaflet
     //Ankara area setted
