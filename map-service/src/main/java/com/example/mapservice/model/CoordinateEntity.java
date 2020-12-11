@@ -17,10 +17,10 @@ import lombok.Data;
 public class CoordinateEntity extends BaseEntity{
 
     @Column(name = "latitude")
-    private Integer latitude;
+    private Double latitude;
     
     @Column(name = "longitude")
-    private Integer longitude;
+    private Double longitude;
     
     @Column(name = "subprovince_id")
     private Long subprovinceId;

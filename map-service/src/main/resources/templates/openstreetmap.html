@@ -266,13 +266,13 @@
                         type: "GET",
                         success: function (data) {
                           //console.log(data);
-                          var latLng = [data[0].latitude * 1e-6, data[0].longitude * 1e-6];
+                          var latLng = [data[0].latitude, data[0].longitude];
                           var searchRadius = getSearchRadius();
                           drawCircle(latLng, searchRadius);
                           var circleBounds = getActiveCircleBounds();
                           setBounds(circleBounds);
                           $.ajax({
-                            url: "http://192.168.30.90:8080/mapservice/eventsinrange/" + latitude + "/" + longitude + "/" + searchRadius,
+                            url: "http://192.168.30.90:8080/mapservice/eventsinrange/" + latLng[0] + "/" + latLng[1] + "/" + searchRadius,
                             type: "GET",
                             success: function (data) {
                               console.log(data);
