@@ -85,7 +85,7 @@
               url: "http://192.168.30.90:8080/mapservice/provinces/" + countryId,
               type: "GET",
               success: function (data) {
-                console.log(data);
+                //console.log(data);
                 
                 for (var i = 0; i < data.length; i++){
                   var option = document.createElement("option");
@@ -109,7 +109,7 @@
               url: "http://192.168.30.90:8080/mapservice/subprovinces/" + provinceId,
               type: "GET",
               success: function (data) {
-                console.log(data);
+                //console.log(data);
                 for (var i = 0; i < data.length; i++){
                   var option = document.createElement("option");
                   option.text = data[i].name;
@@ -157,12 +157,12 @@
             url: "http://192.168.30.90:8080/mapservice/countries",
             type: "GET",
             success: function (data) {
-              console.log(data);
+              //console.log(data);
               var selectedCountry = data.find(findCountryById);
               clearDropdownlist(provinces);
               clearDropdownlist(subprovinces);
               addProvince(selectedCountry);
-              console.log(selectedCountry);
+              //console.log(selectedCountry);
               },
             error: function (error) {
               console.log(`Error ${error}`);
@@ -184,7 +184,7 @@
               var selectedProvince = data.find(findProvinceById);
               clearDropdownlist(subprovinces);
               addSubprovince(selectedProvince);
-              console.log(selectedProvince);
+              //console.log(selectedProvince);
             },
             error: function (error) {
               console.log(`Error ${error}`);
@@ -204,6 +204,7 @@
     // Get search radius from user input
     function getSearchRadius(){
       var searchRadius = document.getElementById("radius").value;
+      console.log(searchRadius);
       return searchRadius;
     }
 
@@ -224,7 +225,7 @@
       .setRadius(searchRadius);
       map.addLayer(circle);
     }
-    ////////////////////// WORK IN PROGRESS //////////////////////////////////
+
     // Get active circle's latitudes and longitudes
     function getActiveCircleBounds() {
       var circleBounds = circle.getBounds();
@@ -232,39 +233,17 @@
       return circleBounds;
     }
 
-    function markLocationsInBounds(eventMarkerArr, bounds) {
-      var northEastLat = bounds._northEast.lat;
-      var northEastLng = bounds._northEast.lng;
-      var southWestLat = bounds._southWest.lat;
-      var southWestLng = bounds._southWest.lng;
-
-    $.ajax({
-      url: "http://192.168.30.90:8080/mapservice/events/" + 2,
-      type: "GET",
-      success: function (data) {
-        console.log(data);
-        for (var i = 0; i < 1; i++) {
-          var lat = data.latitude * 1e-6;
-          var lng = data.longitude * 1e-6;
+    function markLocationsInCircle(data) {
+        var markerArr = new Array();
+        for (var i = 0; i < data.length; i++) {
+          var lat = data[i].latitude;
+          var lng = data[i].longitude;
           latLng = [lat, lng];
-          console.log(latLng);
           var marker = new L.marker(latLng);
-          eventMarkerArr.push(marker);
-          console.log(marker);
-          // show a marker on the map
-          if(eventMarkerArr[i]._latlng.lat < northEastLat && eventMarkerArr[i]._latlng.lat > southWestLat && eventMarkerArr[i]._latlng.lng < northEastLng && eventMarkerArr[i]._latlng.lng > southWestLng) {
-            map.addLayer(eventMarkerArr[i]);
-            } else {
-            map.removeLayer(eventMarkerArr[i]);
-          } 
+          map.addLayer(marker);
         }
-      },
-      error: function (error) {
-        console.log(`Error ${error}`);
-        }
-      })
-    }
-    ////////////////////// WORK IN PROGRESS //////////////////////////////////
+      }
+
     // Search function
     function getAreaOnClick() {
       $.ajax({
@@ -286,13 +265,23 @@
                         url: "http://192.168.30.90:8080/mapservice/coordinates/" + selectedSubprovince.id,
                         type: "GET",
                         success: function (data) {
-                          console.log(data);
+                          //console.log(data);
                           var latLng = [data[0].latitude * 1e-6, data[0].longitude * 1e-6];
                           var searchRadius = getSearchRadius();
                           drawCircle(latLng, searchRadius);
                           var circleBounds = getActiveCircleBounds();
                           setBounds(circleBounds);
-                          markLocationsInBounds(eventMarkerArr, circleBounds);
+                          $.ajax({
+                            url: "http://192.168.30.90:8080/mapservice/eventsinrange/" + latitude + "/" + longitude + "/" + searchRadius,
+                            type: "GET",
+                            success: function (data) {
+                              console.log(data);
+                              markLocationsInCircle(data);
+                            },
+                            error: function (error) {
+                              console.log(`Error ${error}`);
+                            }
+                          })
                         },
                         error: function (error) {
                           console.log(`Error ${error}`);
@@ -319,12 +308,25 @@
     function getAreaOnClickManualInput(){
       var latitude = document.getElementById("latitude").value;
       var longitude = document.getElementById("longitude").value;
+      //Center of circle
       var latLng = [latitude, longitude];
       var searchRadius = getSearchRadius();
       drawCircle(latLng, searchRadius);
       var circleBounds = getActiveCircleBounds();
+      
+      $.ajax({
+        url: "http://192.168.30.90:8080/mapservice/eventsinrange/" + latitude + "/" + longitude + "/" + searchRadius,
+        type: "GET",
+        success: function (data) {
+          console.log(data);
+          markLocationsInCircle(data);
+        },
+        error: function (error) {
+          console.log(`Error ${error}`);
+        }
+      })
       setBounds(circleBounds);
-      markLocationsInBounds(eventMarkerArr, circleBounds);     
+      // TODO: POST radius and circle bounds to service    
     }
                      
     // Get request for countries
