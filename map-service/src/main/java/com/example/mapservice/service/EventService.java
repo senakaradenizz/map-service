@@ -8,8 +8,8 @@ package com.example.mapservice.service;
 import com.example.mapservice.exception.ResourceNotFoundException;
 import com.example.mapservice.model.EventEntity;
 import com.example.mapservice.repository.EventRepository;
+import java.util.ArrayList;
 import java.util.List;
-import jdk.nashorn.internal.runtime.Debug;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,8 +36,8 @@ public class EventService extends BaseServiceImpl{
         final Integer GLOBE_RADIUS = 6371;
         Double searchRadiusInKilometers = searchRadius / 1000;
         Double angularRadius = searchRadiusInKilometers / GLOBE_RADIUS;
-        Double radCenteralLat = (centeralLat * Math.PI) / 180;
-        Double radCenteralLng = (centeralLng * Math.PI) / 180;
+        Double radCenteralLat = Math.toRadians(centeralLat);
+        Double radCenteralLng = Math.toRadians(centeralLng);
         
         Double radSouthWestLat = radCenteralLat - angularRadius;
         Double radNorthEastLat = radCenteralLat + angularRadius;
@@ -56,8 +56,18 @@ public class EventService extends BaseServiceImpl{
                                                                                     southWestLat, 
                                                                                     northEastLng, 
                                                                                     southWestLng);
-        
-        return eventListInBounds;
+
+        List<EventEntity> eventsInCircleList = new ArrayList<>();
+        for(Integer i=0; i < eventListInBounds.size(); i++){
+            Double distance = Math.acos(Math.sin(radCenteralLat) * Math.sin(Math.toRadians(eventListInBounds.get(i).getLatitude()))
+                                        + Math.cos(radCenteralLat) * Math.cos(Math.toRadians(eventListInBounds.get(i).getLatitude()))
+                                        * Math.cos((radCenteralLng - Math.toRadians(eventListInBounds.get(i).getLongitude()))))
+                                        * GLOBE_RADIUS;
+            if(distance < searchRadiusInKilometers){
+                eventsInCircleList.add(eventListInBounds.get(i));
+            }
+        }
+
+        return eventsInCircleList;
     }
-    
 }

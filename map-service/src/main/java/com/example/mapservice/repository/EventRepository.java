@@ -22,4 +22,5 @@ public interface EventRepository extends BaseRepository<EventEntity, Long>{
                                             Double southWestLat,
                                             Double northEastLng,
                                             Double southWestLng);
+    
 }
