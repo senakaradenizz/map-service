@@ -10,10 +10,13 @@ import com.example.mapservice.service.EventService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.mapservice.model.EventEntity;
+import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -30,5 +33,13 @@ public class EventController {
     @GetMapping("/events/{id}")
     public ResponseEntity<EventEntity> findById(@PathVariable Long id) throws ResourceNotFoundException{
         return eventService.getEventById(id);
+    }
+    
+    @GetMapping("/eventsinrange/{centeralLat}/{centeralLng}/{searchRadius}")
+    public List<EventEntity> findAllEventsInRange(@PathVariable Double centeralLat,
+                                                  @PathVariable Double centeralLng, 
+                                                  @PathVariable Double searchRadius){
+        
+        return eventService.getAllEventsInRange(centeralLat, centeralLng, searchRadius);
     }
 }

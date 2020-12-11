@@ -15,11 +15,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EventRepository extends BaseRepository<EventEntity, Long>{
     @Query(
-        value = "SELECT * FROM EVENT e WHERE e.latitude < :northEastLat AND e.latitude > :southWestLat"
-                + "AND e.longitude < :northEastLng AND e.longitude > :southWestLng", 
+        value = "SELECT * FROM EVENT e WHERE e.latitude < ?1 AND e.latitude > ?2 "
+                + "AND e.longitude < ?3 AND e.longitude > ?4", 
                 nativeQuery = true)
-    List<EventEntity> findAll(@Param("northEastLat") Integer northEastLat, 
-                              @Param("southWestLat") Integer southWestLat,
-                              @Param("northEastLng") Integer northEastLng,
-                              @Param("southWestLng") Integer southWestLng);
+    List<EventEntity> findAllEventsInBounds(Double northEastLat, 
+                                            Double southWestLat,
+                                            Double northEastLng,
+                                            Double southWestLng);
 }

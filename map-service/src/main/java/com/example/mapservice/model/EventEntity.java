@@ -17,8 +17,8 @@ import lombok.Data;
 public class EventEntity extends BaseEntity{
     
     @Column(name = "latitude")
-    private Integer latitude;
+    private Double latitude;
     
     @Column(name = "longitude")
-    private Integer longitude;
+    private Double longitude;
 }
