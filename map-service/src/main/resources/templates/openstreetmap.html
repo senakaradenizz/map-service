@@ -36,7 +36,7 @@
       <input type="text" id="latitude" name="latitude" style="width: 54px;">
       <label for="longitude">Longitude:</label>
       <input type="text" id="longitude" name="longitude" style="width: 54px;">
-      <label for="radius">Radius(m):</label>
+      <label for="radius">Radius(Default 500m):</label>
       <input type="text" id="radius" name="radius" style="width: 54px;">
       <button id="w-button-search" type="button" onclick="getAreaOnClickManualInput()">Search</button>
     </div>
@@ -218,6 +218,10 @@
     // Get search radius from user input
     function getSearchRadius(){
       var searchRadius = document.getElementById("radius").value;
+      // Default radius
+      if (searchRadius === ""){
+        searchRadius = 500;
+      }
       console.log(searchRadius);
       return searchRadius;
     }
