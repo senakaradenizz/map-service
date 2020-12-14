@@ -43,10 +43,15 @@ public class EventDetailsService extends BaseServiceImpl{
             if(eventDetails.isPresent()){
                 List<EventDetailsEntity> eventDetailsList = eventDetails.get();
                 for(Integer j=0; j < eventDetailsList.size(); j++){
-                    String eventType = eventDetailsList.get(j).getType().replaceAll("\\s","").toLowerCase();
-                    if(eventType == null ? type == null : eventType.equals(type)){
+                    if("default".equals(type)){
                         eventDetailsInCircleList.add(eventDetailsList.get(j));
+                    } else {
+                        String eventType = eventDetailsList.get(j).getType().replaceAll("\\s","").toLowerCase();
+                        if(eventType == null ? type == null : eventType.equals(type)){
+                            eventDetailsInCircleList.add(eventDetailsList.get(j));
+                        }
                     }
+
                 }  
             }
         }
