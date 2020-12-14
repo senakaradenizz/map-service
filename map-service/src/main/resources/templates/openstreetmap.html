@@ -262,6 +262,7 @@
     }
 
     function storeLocationsInCircle(data){
+        var markerArr = new Array();
         for (var i = 0; i < data.length; i++) {
           var lat = data[i].latitude;
           var lng = data[i].longitude;
@@ -271,9 +272,11 @@
           var markerAndId = [marker, id];
           markerArr.push(markerAndId);
         }
+        console.log(markerArr);
+        return markerArr;
       }
 
-      function markLocationsInCircle(data){
+      function markLocationsInCircle(data, markerArr) {
         for (var i = 0; i < data.length; i++) {
           var lat = data[i].latitude;
           var lng = data[i].longitude;
@@ -284,15 +287,16 @@
           markerArr.push(markerAndId);
           map.addLayer(marker);
         }
+        console.log(markerArr);
       }
 
-    function deleteMarkLocationsInCircle(){
+    function deleteMarkLocationsInCircle(markerArr){
         for (var i = 0; i < markerArr.length; i++) {
           map.removeLayer(markerArr[i][0]);
         }
       }
 
-    function putMarkersInCircle(data){
+    function putMarkersInCircle(data, markerArr) {
         for (var i = 0; i < markerArr.length; i++) {
           for (var j = 0; j < data.length; j++) {
             if (markerArr[i][1] == data[j].eventId) {
@@ -348,19 +352,22 @@
                               console.log(data);
                               eventIdList = getEventIds(data);
                               console.log(eventIdList);
-                              deleteMarkLocationsInCircle();
-                              storeLocationsInCircle(data);
+                              deleteMarkLocationsInCircle(markerArr);
+                              markerArr = storeLocationsInCircle(data);
                               var selectedEventType = eventType.options[eventType.selectedIndex].value;
                               console.log(selectedEventType);
                               if(selectedEventType == "default"){
-                                  markLocationsInCircle(data);
+                                  markLocationsInCircle(data, markerArr);
                               } else {
                                 $.ajax({
                                 url: "http://192.168.30.90:8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType,
                                 type: "GET",
                                 success: function (data) {
                                   console.log(data);
-                                  putMarkersInCircle(data);
+                                  console.log(markerArr);
+                                  if(data.length > 0){
+                                    putMarkersInCircle(data, markerArr);
+                                  }  
                                 },
                                 error: function (error) {
                                   console.log(`Error ${error}`);
@@ -410,8 +417,8 @@
         type: "GET",
         success: function (data) {
           console.log(data);
-          deleteMarkLocationsInCircle();
-          storeLocationsInCircle(data);
+          deleteMarkLocationsInCircle(markerArr);
+          storeLocationsInCircle(data, markerArr);
         },
         error: function (error) {
           console.log(`Error ${error}`);
