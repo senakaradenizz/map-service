@@ -297,7 +297,10 @@
           for (var j = 0; j < data.length; j++) {
             if (markerArr[i][1] == data[j].eventId) {
               map.addLayer(markerArr[i][0]);
-              markerArr[i][0].bindPopup(data[j].type +"\n"+ data[j].subtype +"\n"+ data[j].date);
+              const milliseconds = data[j].date * 1000;
+              const dateObject = new Date(milliseconds);
+              const humanDateFormat = dateObject.toLocaleString();
+              markerArr[i][0].bindPopup(data[j].type +"\n"+ data[j].subtype +"\n"+ humanDateFormat);
             }
           }
         }
