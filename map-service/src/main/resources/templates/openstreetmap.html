@@ -273,6 +273,20 @@
         }
       }
 
+      function markLocationsInCircle(data){
+        for (var i = 0; i < data.length; i++) {
+          var lat = data[i].latitude;
+          var lng = data[i].longitude;
+          var id = data[i].id;
+          latLng = [lat, lng];
+          var marker = new L.marker(latLng);
+          var markerAndId = [marker, id];
+          markerArr.push(markerAndId);
+          map.addLayer(marker);
+          marker.bindPopup("This is the Transamerica Pyramid");
+        }
+      }
+
     function deleteMarkLocationsInCircle(){
         for (var i = 0; i < markerArr.length; i++) {
           map.removeLayer(markerArr[i][0]);
@@ -280,10 +294,9 @@
       }
 
     function putMarkersInCircle(data){
-      console.log(data);
         for (var i = 0; i < markerArr.length; i++) {
           for (var j = 0; j < data.length; j++) {
-            if (markerArr[i][1] === data[j].eventId) {
+            if (markerArr[i][1] == data[j].eventId) {
               map.addLayer(markerArr[i][0]);
               markerArr[i][0].bindPopup("This is the Transamerica Pyramid");
             }
@@ -337,7 +350,10 @@
                               storeLocationsInCircle(data);
                               var selectedEventType = eventType.options[eventType.selectedIndex].value;
                               console.log(selectedEventType);
-                              $.ajax({
+                              if(selectedEventType == "default"){
+                                  markLocationsInCircle(data);
+                              } else {
+                                $.ajax({
                                 url: "http://192.168.30.90:8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType,
                                 type: "GET",
                                 success: function (data) {
@@ -347,7 +363,9 @@
                                 error: function (error) {
                                   console.log(`Error ${error}`);
                                 }
-                              })
+                                })
+                              }
+
                             },
                             error: function (error) {
                               console.log(`Error ${error}`);
