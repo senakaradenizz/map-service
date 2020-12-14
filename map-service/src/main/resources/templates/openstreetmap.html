@@ -56,6 +56,8 @@
     <script>
     // initialize Leaflet
     //Ankara area setted
+
+    const IP_ADDRESS = "192.168.30.90";
     var map = L.map('map').setView([39.925533, 32.866287], 11);
 
     // add the OpenStreetMap tiles
@@ -74,7 +76,7 @@
 
     // Get request for countries
     $.ajax({
-      url: "http://192.168.30.90:8080/mapservice/countries",
+      url: "http://"+IP_ADDRESS+":8080/mapservice/countries",
       type: "GET",
       success: function (data) {
         loadAllCountries(data);
@@ -104,7 +106,7 @@
     function addProvince(currentCountry) {
             var countryId = currentCountry.id;
             $.ajax({
-              url: "http://192.168.30.90:8080/mapservice/provinces/" + countryId,
+              url: "http://"+IP_ADDRESS+":8080/mapservice/provinces/" + countryId,
               type: "GET",
               success: function (data) {
                 //console.log(data);
@@ -128,7 +130,7 @@
     function addSubprovince(currentProvince) {
             var provinceId = currentProvince.id;
             $.ajax({
-              url: "http://192.168.30.90:8080/mapservice/subprovinces/" + provinceId,
+              url: "http://"+IP_ADDRESS+":8080/mapservice/subprovinces/" + provinceId,
               type: "GET",
               success: function (data) {
                 //console.log(data);
@@ -176,7 +178,7 @@
     // Populate provinces related to selected country on change country drop-down
     function onChangeCountry() {
             $.ajax({
-            url: "http://192.168.30.90:8080/mapservice/countries",
+            url: "http://"+IP_ADDRESS+":8080/mapservice/countries",
             type: "GET",
             success: function (data) {
               //console.log(data);
@@ -195,12 +197,12 @@
     // Populate provinces related to selected country on change country drop-down
     function onChangeProvince() {
       $.ajax({
-        url: "http://192.168.30.90:8080/mapservice/countries",
+        url: "http://"+IP_ADDRESS+":8080/mapservice/countries",
         type: "GET",
         success: function (data) {
           var selectedCountry = data.find(findCountryById);
           $.ajax({
-            url: "http://192.168.30.90:8080/mapservice/provinces/" + selectedCountry.id,
+            url: "http://"+IP_ADDRESS+":8080/mapservice/provinces/" + selectedCountry.id,
             type: "GET",
             success: function (data) {
               var selectedProvince = data.find(findProvinceById);
@@ -316,22 +318,22 @@
     // Search function
     function getAreaOnClick() {
       $.ajax({
-            url: "http://192.168.30.90:8080/mapservice/countries",
+            url: "http://"+IP_ADDRESS+":8080/mapservice/countries",
             type: "GET",
             success: function (data) {
               var selectedCountry = data.find(findCountryById);
               $.ajax({
-                url: "http://192.168.30.90:8080/mapservice/provinces/" + selectedCountry.id,
+                url: "http://"+IP_ADDRESS+":8080/mapservice/provinces/" + selectedCountry.id,
                 type: "GET",
                 success: function (data) {
                   var selectedProvince = data.find(findProvinceById);
                   $.ajax({
-                    url: "http://192.168.30.90:8080/mapservice/subprovinces/" + selectedProvince.id,
+                    url: "http://"+IP_ADDRESS+":8080/mapservice/subprovinces/" + selectedProvince.id,
                     type: "GET",
                     success: function (data) {
                       var selectedSubprovince = data.find(findSubprovinceById);
                       $.ajax({
-                        url: "http://192.168.30.90:8080/mapservice/coordinates/" + selectedSubprovince.id,
+                        url: "http://"+IP_ADDRESS+":8080/mapservice/coordinates/" + selectedSubprovince.id,
                         type: "GET",
                         success: function (data) {
                           //console.log(data);
@@ -341,7 +343,7 @@
                           var circleBounds = getActiveCircleBounds();
                           setBounds(circleBounds);
                           $.ajax({
-                            url: "http://192.168.30.90:8080/mapservice/eventsinrange/" + latLng[0] + "/" + latLng[1] + "/" + searchRadius,
+                            url: "http://"+IP_ADDRESS+":8080/mapservice/eventsinrange/" + latLng[0] + "/" + latLng[1] + "/" + searchRadius,
                             type: "GET",
                             success: function (data) {
                               console.log(data);
@@ -353,7 +355,7 @@
                               console.log(selectedEventType);
                               
                               $.ajax({
-                                url: "http://192.168.30.90:8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType,
+                                url: "http://"+IP_ADDRESS+":8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType,
                                 type: "GET",
                                 success: function (data) {
                                   console.log(data);
@@ -404,7 +406,7 @@
       var circleBounds = getActiveCircleBounds();
       setBounds(circleBounds); 
       $.ajax({
-        url: "http://192.168.30.90:8080/mapservice/eventsinrange/" + latitude + "/" + longitude + "/" + searchRadius,
+        url: "http://"+IP_ADDRESS+":8080/mapservice/eventsinrange/" + latitude + "/" + longitude + "/" + searchRadius,
         type: "GET",
         success: function (data) {
           console.log(data);
