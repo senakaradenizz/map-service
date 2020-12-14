@@ -280,11 +280,12 @@
       }
 
     function putMarkersInCircle(data){
+      console.log(data);
         for (var i = 0; i < markerArr.length; i++) {
           for (var j = 0; j < data.length; j++) {
             if (markerArr[i][1] === data[j].eventId) {
               map.addLayer(markerArr[i][0]);
-              marker.bindPopup("This is the Transamerica Pyramid");
+              markerArr[i][0].bindPopup("This is the Transamerica Pyramid");
             }
           }
         }
