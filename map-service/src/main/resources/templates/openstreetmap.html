@@ -33,10 +33,10 @@
     </div>
     <div>
       <select class="form-control" name="example" id="eventType">
-        <option value="0">Event Type</option>
-        <option value="1">Terror</option>
-        <option value="2">Natural Disaster</option>
-        <option value="3">Crime</option>
+        <option value="default">Event Type</option>
+        <option value="terror">Terror</option>
+        <option value="naturaldisaster">Natural Disaster</option>
+        <option value="crime">Crime</option>
       </select>
         <label for="start">Date:</label>
         <input type="date" id="start" name="trip-start"
@@ -70,7 +70,7 @@
     var countries = document.getElementById("countries");
     var provinces = document.getElementById("provinces");
     var subprovinces = document.getElementById("subprovinces");
-    var coordinates = document.getElementById("coordinates");
+    var eventType = document.getElementById("eventType");
 
     // Get request for countries
     $.ajax({
@@ -255,29 +255,48 @@
     }
 
     // Get active circle's latitudes and longitudes
-    function getActiveCircleBounds() {
+    function getActiveCircleBounds(){
       var circleBounds = circle.getBounds();
       console.log(circleBounds);
       return circleBounds;
     }
 
-    function markLocationsInCircle(data) {
+    function storeLocationsInCircle(data){
         for (var i = 0; i < data.length; i++) {
           var lat = data[i].latitude;
           var lng = data[i].longitude;
+          var id = data[i].id;
           latLng = [lat, lng];
           var marker = new L.marker(latLng);
-          markerArr.push(marker);
-          map.addLayer(marker);
-          marker.bindPopup("This is the Transamerica Pyramid");
+          var markerAndId = [marker, id];
+          markerArr.push(markerAndId);
         }
       }
 
-    function deleteMarkLocationsInCircle() {
+    function deleteMarkLocationsInCircle(){
         for (var i = 0; i < markerArr.length; i++) {
-          map.removeLayer(markerArr[i]);
+          map.removeLayer(markerArr[i][0]);
         }
       }
+
+    function putMarkersInCircle(data){
+        for (var i = 0; i < markerArr.length; i++) {
+          for (var j = 0; j < data.length; j++) {
+            if (markerArr[i][1] === data[j].eventId) {
+              map.addLayer(markerArr[i][0]);
+              marker.bindPopup("This is the Transamerica Pyramid");
+            }
+          }
+        }
+    }
+    
+    function getEventIds(data){
+      eventIdList = new Array();
+      for (var i = 0; i < data.length; i++) {
+        eventIdList.push(data[i].id);
+      }
+      return eventIdList;
+    }
 
     // Search function
     function getAreaOnClick() {
@@ -311,8 +330,23 @@
                             type: "GET",
                             success: function (data) {
                               console.log(data);
+                              eventIdList = getEventIds(data);
+                              console.log(eventIdList);
                               deleteMarkLocationsInCircle();
-                              markLocationsInCircle(data);
+                              storeLocationsInCircle(data);
+                              var selectedEventType = eventType.options[eventType.selectedIndex].value;
+                              console.log(selectedEventType);
+                              $.ajax({
+                                url: "http://192.168.30.90:8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType,
+                                type: "GET",
+                                success: function (data) {
+                                  console.log(data);
+                                  putMarkersInCircle(data);
+                                },
+                                error: function (error) {
+                                  console.log(`Error ${error}`);
+                                }
+                              })
                             },
                             error: function (error) {
                               console.log(`Error ${error}`);
@@ -356,7 +390,7 @@
         success: function (data) {
           console.log(data);
           deleteMarkLocationsInCircle();
-          markLocationsInCircle(data);
+          storeLocationsInCircle(data);
         },
         error: function (error) {
           console.log(`Error ${error}`);
