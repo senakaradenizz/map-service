@@ -10,11 +10,10 @@ import com.example.mapservice.repository.EventDetailsRepository;
 import com.example.mapservice.model.EventDetailsEntity;
 import java.util.List;
 import java.util.Optional;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+
 @Service
 public class EventDetailsService extends BaseServiceImpl{
     

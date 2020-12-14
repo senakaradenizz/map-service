@@ -9,7 +9,6 @@ import com.example.mapservice.exception.ResourceNotFoundException;
 import com.example.mapservice.model.BaseEntity;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.web.bind.annotation.RestController;
 
 
