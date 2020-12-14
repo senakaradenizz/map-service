@@ -283,7 +283,6 @@
           var markerAndId = [marker, id];
           markerArr.push(markerAndId);
           map.addLayer(marker);
-          marker.bindPopup("This is the Transamerica Pyramid");
         }
       }
 
@@ -298,7 +297,7 @@
           for (var j = 0; j < data.length; j++) {
             if (markerArr[i][1] == data[j].eventId) {
               map.addLayer(markerArr[i][0]);
-              markerArr[i][0].bindPopup("This is the Transamerica Pyramid");
+              markerArr[i][0].bindPopup(data[j].type +"\n"+ data[j].subtype +"\n"+ data[j].date);
             }
           }
         }
