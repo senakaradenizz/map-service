@@ -414,8 +414,25 @@
         type: "GET",
         success: function (data) {
           console.log(data);
+          eventIdList = getEventIds(data);
           deleteMarkLocationsInCircle(markerArr);
-          storeLocationsInCircle(data, markerArr);
+          markerArr = storeLocationsInCircle(data);
+          var selectedEventType = eventType.options[eventType.selectedIndex].value;
+          console.log(selectedEventType);
+          $.ajax({
+                url: "http://"+IP_ADDRESS+":8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType,
+                type: "GET",
+                success: function (data) {
+                         console.log(data);
+                         console.log(markerArr);
+                         if(data.length > 0){
+                            putMarkersInCircle(data, markerArr, selectedEventType);
+                         }  
+                },
+                error: function (error) {
+                         console.log(`Error ${error}`);
+                }
+          })
         },
         error: function (error) {
           console.log(`Error ${error}`);
