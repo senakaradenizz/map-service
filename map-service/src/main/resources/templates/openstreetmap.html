@@ -459,73 +459,56 @@
        
     }
 
-    var circleButton = document.radioButton.circle;
-    var rectangleButton = document.radioButton.rectangle;
-    var squareButton = document.radioButton.square;
-
-    $(document).ready(function () {
-      $('#circle').click(function (){
-        if ($(this.checked)){
-          console.log(this.id);
-          map.on('click', onMapClickCircle);
-        }
-      });
-
-      $('#rectangle').click(function () {
-        if ($(this.checked)) {
-          console.log(this.id);
-        }
-      });
-
-      $('#square').click(function () {
-        if ($(this.checked)) {
-          console.log(this.id);
-        }
-      });
-
-    });
-        
-    
-
     function onMapClickCircle(e) {
         console.log(e.latlng);
         var latLng = [e.latlng.lat, e.latlng.lng];
         var searchRadius = getSearchRadius();
-        drawCircle(latLng, searchRadius);
+
+        if(document.getElementById("circle").checked){
+          drawCircle(latLng, searchRadius);
+          
+        }
+        else if(document.getElementById("rectangle").checked){
+          map.removeLayer(circle);
+        }
+        else if(document.getElementById("square").checked){
+          map.removeLayer(circle);
+        }
+
         var circleBounds = getActiveCircleBounds(circle);
         setBounds(circleBounds);
         $.ajax({
-            url: "http://"+IP_ADDRESS+":8080/mapservice/eventsinrange/" + latLng[0] + "/" + latLng[1] + "/" + searchRadius,
-            type: "GET",
-            success: function (data) {
-              console.log(data);
-              eventIdList = getEventIds(data);
-              console.log(eventIdList);
-              deleteMarkLocationsInCircle(markerArr);
-              markerArr = storeLocationsInCircle(data);
-              var selectedEventType = eventType.options[eventType.selectedIndex].value;
-              console.log(selectedEventType);
-                    $.ajax({
-                      url: "http://"+IP_ADDRESS+":8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType,
-                      type: "GET",
-                      success: function (data) {
-                        console.log(data);
-                        console.log(markerArr);
-                        if(data.length > 0){
-                          putMarkersInCircle(data, markerArr, selectedEventType);
-                        }  
-                      },
-                      error: function (error) {
-                        console.log(`Error ${error}`);
-                      }
-                    })
-            },
-            error: function (error) {
-              console.log(`Error ${error}`);
-            }
-        })                  
+              url: "http://"+IP_ADDRESS+":8080/mapservice/eventsinrange/" + latLng[0] + "/" + latLng[1] + "/" + searchRadius,
+              type: "GET",
+              success: function (data) {
+                console.log(data);
+                eventIdList = getEventIds(data);
+                console.log(eventIdList);
+                deleteMarkLocationsInCircle(markerArr);
+                markerArr = storeLocationsInCircle(data);
+                var selectedEventType = eventType.options[eventType.selectedIndex].value;
+                console.log(selectedEventType);
+                      $.ajax({
+                        url: "http://"+IP_ADDRESS+":8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType,
+                        type: "GET",
+                        success: function (data) {
+                          console.log(data);
+                          console.log(markerArr);
+                          if(data.length > 0){
+                            putMarkersInCircle(data, markerArr, selectedEventType);
+                          }  
+                        },
+                        error: function (error) {
+                          console.log(`Error ${error}`);
+                        }
+                      })
+              },
+              error: function (error) {
+                console.log(`Error ${error}`);
+              }
+          })                  
       }
-
+      map.on('click', onMapClickCircle);
       
 
     </script>
