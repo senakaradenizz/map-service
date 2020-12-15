@@ -83,18 +83,6 @@
     var provinces = document.getElementById("provinces");
     var subprovinces = document.getElementById("subprovinces");
     var eventType = document.getElementById("eventType");
-    document.getElementById("startDate").addEventListener("change", function() {
-      var startDate = this.value;
-      var startDateEntered = new Date(startDate);
-      console.log(startDate); //e.g. 2015-11-13
-      console.log(startDateEntered); //e.g. Fri Nov 13 2015 00:00:00 GMT+0000 (GMT Standard Time)
-    });
-    document.getElementById("endDate").addEventListener("change", function() {
-      var endDate = this.value;
-      var endDateEntered = new Date(endDate);
-      console.log(endDate); //e.g. 2015-11-13
-      console.log(endDateEntered); //e.g. Fri Nov 13 2015 00:00:00 GMT+0000 (GMT Standard Time)
-    });
 
     // Get request for countries
     $.ajax({
@@ -305,7 +293,8 @@
           map.removeLayer(markerArr[i][0]);
         }
       }
-
+    
+    // IF KALDIRILABİLİR GİBİ.
     function putMarkersInCircle(data, markerArr, selectedEventType) {
         for (var i = 0; i < markerArr.length; i++) {
           if(selectedEventType == "default"){
@@ -375,21 +364,26 @@
                               markerArr = storeLocationsInCircle(data);
                               var selectedEventType = eventType.options[eventType.selectedIndex].value;
                               console.log(selectedEventType);
-                              
-                              $.ajax({
-                                url: "http://"+IP_ADDRESS+":8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType,
-                                type: "GET",
-                                success: function (data) {
-                                  console.log(data);
-                                  console.log(markerArr);
-                                  if(data.length > 0){
-                                    putMarkersInCircle(data, markerArr, selectedEventType);
-                                  }  
-                                },
-                                error: function (error) {
-                                  console.log(`Error ${error}`);
-                                }
-                              })
+                              var startDate = document.getElementById("startDate").value;
+                              console.log(startDate);
+                              var endDate = document.getElementById("endDate").value;
+                              console.log(endDate);
+                              if(eventIdList.length > 0){
+                                $.ajax({
+                                  url: "http://"+IP_ADDRESS+":8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType + "/" + startDate + "/" + endDate,
+                                  type: "GET",
+                                  success: function (data) {
+                                    console.log(data);
+                                    console.log(markerArr);
+                                    if(data.length > 0){
+                                      putMarkersInCircle(data, markerArr, selectedEventType);
+                                    }  
+                                  },
+                                  error: function (error) {
+                                    console.log(`Error ${error}`);
+                                  }
+                                })
+                              }
                             },
                             error: function (error) {
                               console.log(`Error ${error}`);

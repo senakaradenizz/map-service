@@ -14,6 +14,7 @@ import com.example.mapservice.model.EventEntity;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -34,10 +35,18 @@ public class EventDetailsController implements BaseController{
     public List<EventDetailsEntity> findById(@PathVariable Long eventId) throws ResourceNotFoundException{
         return eventDetailsService.getEventDetailsByEventId(eventId);
     }
-    
+    // KALDIRILABİLİR!
     @GetMapping("/eventdetails/{eventIdList}/{type}")  
     public List<EventDetailsEntity> findByType(@PathVariable List<Long> eventIdList, @PathVariable String type) 
             throws ResourceNotFoundException{
         return eventDetailsService.getEventDetailsByType(eventIdList, type);
+    }
+    
+    @GetMapping("/eventdetails/{eventIdList}/{type}/{dateStart}/{dateEnd}")  
+    public List<EventDetailsEntity> findByTypeAndOrDate(@PathVariable List<Long> eventIdList, @PathVariable String type,
+                                                        @DateTimeFormat(pattern="yyyy-MM-dd") @PathVariable Date dateStart, 
+                                                        @DateTimeFormat(pattern="yyyy-MM-dd") @PathVariable Date dateEnd) 
+            throws ResourceNotFoundException{
+        return eventDetailsService.getEventDetailsByTypeAndOrDate(eventIdList, type, dateStart, dateEnd);
     }
 }
