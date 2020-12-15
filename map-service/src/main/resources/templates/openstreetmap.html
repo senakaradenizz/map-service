@@ -39,12 +39,10 @@
         <option value="crime">Crime</option>
       </select>
         <label for="start">From Date:</label>
-        <input type="date" id="start" name="trip-start"
-               value="0"
+        <input type="date" id="startDate"
                min="2010-01-01" max="2021-01-01">
         <label for="start">To Date:</label>
-        <input type="date" id="start" name="trip-start"
-               value="0"
+        <input type="date" id="endDate"
                min="2010-01-01" max="2021-01-01">
     </div>
     <div>
@@ -66,10 +64,10 @@
     </form>
     <div id="map"></div>
     <script>
+    
+    const IP_ADDRESS = "192.168.30.90";
     // initialize Leaflet
     //Ankara area setted
-
-    const IP_ADDRESS = "192.168.30.90";
     var map = L.map('map').setView([39.925533, 32.866287], 11);
 
     // add the OpenStreetMap tiles
@@ -85,6 +83,18 @@
     var provinces = document.getElementById("provinces");
     var subprovinces = document.getElementById("subprovinces");
     var eventType = document.getElementById("eventType");
+    document.getElementById("startDate").addEventListener("change", function() {
+      var startDate = this.value;
+      var startDateEntered = new Date(startDate);
+      console.log(startDate); //e.g. 2015-11-13
+      console.log(startDateEntered); //e.g. Fri Nov 13 2015 00:00:00 GMT+0000 (GMT Standard Time)
+    });
+    document.getElementById("endDate").addEventListener("change", function() {
+      var endDate = this.value;
+      var endDateEntered = new Date(endDate);
+      console.log(endDate); //e.g. 2015-11-13
+      console.log(endDateEntered); //e.g. Fri Nov 13 2015 00:00:00 GMT+0000 (GMT Standard Time)
+    });
 
     // Get request for countries
     $.ajax({
