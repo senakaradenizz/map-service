@@ -261,7 +261,7 @@
     }
 
     // Get active circle's latitudes and longitudes
-    function getActiveCircleBounds(){
+    function getActiveCircleBounds(circle){
       var circleBounds = circle.getBounds();
       console.log(circleBounds);
       return circleBounds;
@@ -344,7 +344,7 @@
                           var latLng = [data[0].latitude, data[0].longitude];
                           var searchRadius = getSearchRadius();
                           drawCircle(latLng, searchRadius);
-                          var circleBounds = getActiveCircleBounds();
+                          var circleBounds = getActiveCircleBounds(circle);
                           setBounds(circleBounds);
                           $.ajax({
                             url: "http://"+IP_ADDRESS+":8080/mapservice/eventsinrange/" + latLng[0] + "/" + latLng[1] + "/" + searchRadius,
@@ -407,7 +407,7 @@
       var latLng = [latitude, longitude];
       var searchRadius = getSearchRadius();
       drawCircle(latLng, searchRadius);
-      var circleBounds = getActiveCircleBounds();
+      var circleBounds = getActiveCircleBounds(circle);
       setBounds(circleBounds); 
       $.ajax({
         url: "http://"+IP_ADDRESS+":8080/mapservice/eventsinrange/" + latitude + "/" + longitude + "/" + searchRadius,
@@ -440,6 +440,48 @@
       })
        
     }
+
+    
+    function onMapClick(e) {
+        console.log(e.latlng);
+        var latLng = [e.latlng.lat, e.latlng.lng];
+        var searchRadius = getSearchRadius();
+        drawCircle(latLng, searchRadius);
+        var circleBounds = getActiveCircleBounds(circle);
+        setBounds(circleBounds);
+        $.ajax({
+            url: "http://"+IP_ADDRESS+":8080/mapservice/eventsinrange/" + latLng[0] + "/" + latLng[1] + "/" + searchRadius,
+            type: "GET",
+            success: function (data) {
+              console.log(data);
+              eventIdList = getEventIds(data);
+              console.log(eventIdList);
+              deleteMarkLocationsInCircle(markerArr);
+              markerArr = storeLocationsInCircle(data);
+              var selectedEventType = eventType.options[eventType.selectedIndex].value;
+              console.log(selectedEventType);
+                    $.ajax({
+                      url: "http://"+IP_ADDRESS+":8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType,
+                      type: "GET",
+                      success: function (data) {
+                        console.log(data);
+                        console.log(markerArr);
+                        if(data.length > 0){
+                          putMarkersInCircle(data, markerArr, selectedEventType);
+                        }  
+                      },
+                      error: function (error) {
+                        console.log(`Error ${error}`);
+                      }
+                    })
+            },
+            error: function (error) {
+              console.log(`Error ${error}`);
+            }
+        })                  
+      }
+
+      map.on('click', onMapClick);
 
     </script>
   </body>
