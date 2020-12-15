@@ -56,14 +56,14 @@
       <input type="text" id="radius" name="radius" style="width: 54px;">
       <button id="w-button-search" type="button" onclick="getAreaOnClickManualInput()">Search</button>
     </div>
-    <div>
-      <input type="radio" id="circle" name="button" value="circle" checked>
+    <form name="radioButton">
+      <input type="radio" id="circle" name="radioButton" value="circle" checked>
       <label for="circle">Circle</label>
-      <input type="radio" id="rectangle" name="button" value="rectangle">
+      <input type="radio" id="rectangle" name="radioButton" value="rectangle">
       <label for="rectangle">Rectangle</label>
-      <input type="radio" id="square" name="button" value="square">
+      <input type="radio" id="square" name="radioButton" value="square">
       <label for="square">Square</label>
-    </div>
+    </form>
     <div id="map"></div>
     <script>
     // initialize Leaflet
@@ -449,8 +449,35 @@
        
     }
 
+    var circleButton = document.radioButton.circle;
+    var rectangleButton = document.radioButton.rectangle;
+    var squareButton = document.radioButton.square;
+
+    $(document).ready(function () {
+      $('#circle').click(function (){
+        if ($(this.checked)){
+          console.log(this.id);
+          map.on('click', onMapClickCircle);
+        }
+      });
+
+      $('#rectangle').click(function () {
+        if ($(this.checked)) {
+          console.log(this.id);
+        }
+      });
+
+      $('#square').click(function () {
+        if ($(this.checked)) {
+          console.log(this.id);
+        }
+      });
+
+    });
+        
     
-    function onMapClick(e) {
+
+    function onMapClickCircle(e) {
         console.log(e.latlng);
         var latLng = [e.latlng.lat, e.latlng.lng];
         var searchRadius = getSearchRadius();
@@ -489,7 +516,7 @@
         })                  
       }
 
-      map.on('click', onMapClick);
+      
 
     </script>
   </body>
