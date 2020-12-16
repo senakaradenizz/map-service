@@ -33,7 +33,7 @@ public class EventService extends BaseServiceImpl{
     }
 
     public List<EventEntity> getAllEventsInRange(Double centeralLat, Double centeralLng, Double searchRadius) {
-        final Integer GLOBE_RADIUS = 6371;
+        final Double GLOBE_RADIUS = 6378.137;
         Double searchRadiusInKilometers = searchRadius / 1000;
         Double angularRadius = searchRadiusInKilometers / GLOBE_RADIUS;
         Double radCenteralLat = Math.toRadians(centeralLat);
