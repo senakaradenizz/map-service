@@ -54,14 +54,6 @@
       <input type="text" id="radius" name="radius" style="width: 54px;">
       <button id="w-button-search" type="button" onclick="getAreaOnClickManualInput()">Search</button>
     </div>
-    <form name="radioButton">
-      <input type="radio" id="circle" name="radioButton" value="circle" checked>
-      <label for="circle">Circle</label>
-      <input type="radio" id="rectangle" name="radioButton" value="rectangle">
-      <label for="rectangle">Rectangle</label>
-      <input type="radio" id="square" name="radioButton" value="square">
-      <label for="square">Square</label>
-    </form>
     <div id="map"></div>
     <script>
     
@@ -299,7 +291,6 @@
         for (var i = 0; i < markerArr.length; i++) {
           if(selectedEventType == "default"){
             map.addLayer(markerArr[i][0]);
-            console.log(i);
             const milliseconds = data[i].date;
             const dateObject = new Date(milliseconds);
             const humanDateFormat = dateObject.toLocaleString();
@@ -457,18 +448,7 @@
         console.log(e.latlng);
         var latLng = [e.latlng.lat, e.latlng.lng];
         var searchRadius = getSearchRadius();
-
-        if(document.getElementById("circle").checked){
-          drawCircle(latLng, searchRadius);
-          
-        }
-        else if(document.getElementById("rectangle").checked){
-          map.removeLayer(circle);
-        }
-        else if(document.getElementById("square").checked){
-          map.removeLayer(circle);
-        }
-
+        drawCircle(latLng, searchRadius);
         var circleBounds = getActiveCircleBounds(circle);
         setBounds(circleBounds);
         $.ajax({
@@ -482,20 +462,26 @@
                 markerArr = storeLocationsInCircle(data);
                 var selectedEventType = eventType.options[eventType.selectedIndex].value;
                 console.log(selectedEventType);
-                      $.ajax({
-                        url: "http://"+IP_ADDRESS+":8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType,
-                        type: "GET",
-                        success: function (data) {
-                          console.log(data);
-                          console.log(markerArr);
-                          if(data.length > 0){
-                            putMarkersInCircle(data, markerArr, selectedEventType);
-                          }  
-                        },
-                        error: function (error) {
-                          console.log(`Error ${error}`);
-                        }
-                      })
+                var startDate = document.getElementById("startDate").value;
+                              console.log(startDate);
+                              var endDate = document.getElementById("endDate").value;
+                              console.log(endDate);
+                              if(eventIdList.length > 0){
+                                $.ajax({
+                                  url: "http://"+IP_ADDRESS+":8080/mapservice/eventdetails/" + eventIdList + "/" + selectedEventType + "/" + startDate + "/" + endDate,
+                                  type: "GET",
+                                  success: function (data) {
+                                    console.log(data);
+                                    console.log(markerArr);
+                                    if(data.length > 0){
+                                      putMarkersInCircle(data, markerArr, selectedEventType);
+                                    }  
+                                  },
+                                  error: function (error) {
+                                    console.log(`Error ${error}`);
+                                  }
+                                })
+                              }
               },
               error: function (error) {
                 console.log(`Error ${error}`);
