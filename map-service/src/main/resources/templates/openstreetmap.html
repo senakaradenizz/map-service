@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="/home/mehmet/Desktop/map-service/map-service/src/main/resources/templates/leaflet/leaflet.js"></script>
+    <script src="/home/mehmet/Desktop/map-service/map-service/src/main/resources/templates/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" href="/home/mehmet/Desktop/map-service/map-service/src/main/resources/templates/leaflet/leaflet.css" />
     <style>
       html, body {
         height: 100%;
@@ -44,6 +44,7 @@
         <label for="start">To Date:</label>
         <input type="date" id="endDate"
                min="2010-01-01" max="2021-01-01">
+        <button id="w-button-clear-dates" type="button" onclick="clearDate()">Clear Date</button>
     </div>
     <div>
       <label for="latitude">Latitude:</label>
@@ -56,16 +57,15 @@
     </div>
     <div id="map"></div>
     <script>
-    
-    const IP_ADDRESS = "192.168.30.90";
+    // 192.168.30.90
+    const IP_ADDRESS = "localhost";
     // initialize Leaflet
     //Ankara area setted
     var map = L.map('map').setView([39.925533, 32.866287], 11);
 
     // add the OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    L.tileLayer('http://localhost/osm_tiles/{z}/{x}/{y}.png', {
+        maxZoom: 19
     }).addTo(map);
 
     // show the scale bar on the lower left corner
@@ -264,7 +264,7 @@
       console.log(circleBounds);
       return circleBounds;
     }
-
+    
     function storeLocationsInCircle(data){
         var markerArr = new Array();
         for (var i = 0; i < data.length; i++) {
@@ -307,6 +307,12 @@
         eventIdList.push(data[i].id);
       }
       return eventIdList;
+    }
+
+    // Set date to default
+    function clearDate(){
+      document.getElementById("startDate").value = '';
+      document.getElementById("endDate").value = '';
     }
 
     // Search function
