@@ -65,7 +65,8 @@
 
     // add the OpenStreetMap tiles
     L.tileLayer('http://' + IP_ADDRESS + '/osm_tiles/{z}/{x}/{y}.png', {
-        maxZoom: 18
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
     }).addTo(map);
 
     // show the scale bar on the lower left corner
