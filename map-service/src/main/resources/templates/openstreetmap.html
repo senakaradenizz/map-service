@@ -293,7 +293,7 @@
                 map.addLayer(markerArr[i][0]);
                 const milliseconds = data[j].date;
                 const dateObject = new Date(milliseconds);
-                const humanDateFormat = dateObject.toLocaleString();
+                const humanDateFormat = dateObject.toLocaleString('en-GB', { timeZone: 'UTC' });
                 markerArr[i][0].bindPopup(data[j].type +"\n"+ data[j].subtype +"\n"+ humanDateFormat);
               }
             }
