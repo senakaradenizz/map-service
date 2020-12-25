@@ -58,13 +58,13 @@
     <div id="map"></div>
     <script>
     // 192.168.30.90
-    const IP_ADDRESS = "localhost";
+    const IP_ADDRESS = "192.168.30.90";
     // initialize Leaflet
     //Ankara area setted
     var map = L.map('map').setView([39.925533, 32.866287], 11);
 
     // add the OpenStreetMap tiles
-    L.tileLayer('http://localhost/osm_tiles/{z}/{x}/{y}.png', {
+    L.tileLayer('http://' + IP_ADDRESS + '/osm_tiles/{z}/{x}/{y}.png', {
         maxZoom: 18
     }).addTo(map);
 
