@@ -227,8 +227,12 @@
     // Empty circle
     var circle = L.circle();
 
-    //Emty marker array
+    // Empty marker array
     var markerArr = new Array();
+
+    // Event color dictionary and event radius
+    var eventColorDict = {"terror": "#000000", "naturaldisaster": "#3C8C05", "crime": "#C70039"};
+    var eventRadius = 7;
     
     // Get search radius from user input
     function getSearchRadius(){
@@ -273,7 +277,7 @@
           var lng = data[i].longitude;
           var id = data[i].id;
           latLng = [lat, lng];
-          var marker = new L.marker(latLng);
+          var marker = new L.circleMarker(latLng);
           var markerAndId = [marker, id];
           markerArr.push(markerAndId);
         }
@@ -291,6 +295,33 @@
         for (var i = 0; i < markerArr.length; i++) {
             for (var j = 0; j < data.length; j++) {
               if (markerArr[i][1] == data[j].eventId) {
+                switch(data[j].type) {
+                  case "Terror":
+                    markerArr[i][0]
+                    .setStyle(({
+                      color: eventColorDict["terror"],
+                      fillColor: eventColorDict["terror"],
+                      fillOpacity: 1
+                    }))
+                    .setRadius(eventRadius);
+                    break;
+                  case "Natural Disaster":
+                    markerArr[i][0].setStyle(({
+                      color: eventColorDict["naturaldisaster"],
+                      fillColor: eventColorDict["naturaldisaster"],
+                      fillOpacity: 1
+                    }))
+                    .setRadius(eventRadius);
+                    break;
+                  case "Crime":
+                    markerArr[i][0].setStyle(({
+                      color: eventColorDict["crime"],
+                      fillColor: eventColorDict["crime"],
+                      fillOpacity: 1
+                    }))
+                    .setRadius(eventRadius);
+                    break;
+                }
                 map.addLayer(markerArr[i][0]);
                 const milliseconds = data[j].date;
                 const dateObject = new Date(milliseconds);
